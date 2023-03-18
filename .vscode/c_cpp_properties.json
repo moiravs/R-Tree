@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/home/emily/Documents/geotools-21.2/**"
+                "/home/emily/Documents/geotools-21.2/**",
+                "tutorial/src/main/java/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

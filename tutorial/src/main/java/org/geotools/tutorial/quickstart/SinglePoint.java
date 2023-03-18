@@ -2,8 +2,7 @@
  *    Annexe pour l'énoncé du projet d'INFOF203 (2022-2023)
  *    
  */
-
-package be.ulb.infof203.projet;
+package org.geotools.tutorial.quickstart;
 
 import java.awt.Color;
 import java.io.File;
