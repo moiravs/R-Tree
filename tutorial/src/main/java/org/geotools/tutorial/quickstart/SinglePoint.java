@@ -4,9 +4,7 @@
  */
 package org.geotools.tutorial.quickstart;
 
-import java.util.*;
 import java.awt.Color;
-import java.util.concurrent.ThreadLocalRandom;
 import java.io.File;
 
 import org.geotools.data.FileDataStore;
