@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/home/emily/Documents/geotools-21.2/**",
+                "/home/andri/Downloads/geotools-21.2/**",
                 "tutorial/src/main/java/**"
             ],
             "defines": [],
