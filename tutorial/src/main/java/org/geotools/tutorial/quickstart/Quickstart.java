@@ -49,13 +49,7 @@ public class Quickstart {
      */
     public static void main(String[] args) throws Exception {
         // display a data store file chooser dialog for shapefiles
-        // String
-        // filename="../projetinfof203/data/sh_statbel_statistical_sectors_31370_20220101.shp/sh_statbel_statistical_sectors_31370_20220101.shp";
-
         String filename = "../tutorial/maps/sh_statbel_statistical_sectors_31370_20220101.shp";
-
-        // String
-        // filename="../projetinfof203/data/communes-20220101-shp/communes-20220101.shp";
 
         File file = new File(filename);
         if (!file.exists())
@@ -73,7 +67,7 @@ public class Quickstart {
         Random r = new Random();
 
         GeometryBuilder gb = new GeometryBuilder();
-        // Point p = gb.point(152183, 167679);// Plaine
+        Point p = gb.point(152183, 167679);// Plaine
         // Point p = gb.point(4.4, 50.8);//
         // Point p = gb.point(58.0, 47.0);
         // Point p = gb.point(10.6,59.9);// Oslo
@@ -83,8 +77,9 @@ public class Quickstart {
 
         // Point p = gb.point(172.97365198326708, 1.8869725782923172);
 
-        Point p = gb.point(r.nextInt((int) global_bounds.getMinX(), (int) global_bounds.getMaxX()),
-                r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
+        // Point p = gb.point(r.nextInt((int) global_bounds.getMinX(), (int)
+        // global_bounds.getMaxX()),
+        // r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
 
         SimpleFeature target = null;
 
@@ -147,8 +142,36 @@ public class Quickstart {
         Style style2 = SLD.createLineStyle(Color.red, 2.0f);
         Layer layer2 = new FeatureLayer(collection, style2);
         map.addLayer(layer2);
+        Node node = new Node("blabla", c);
 
         // Now display the map
         JMapFrame.showMap(map);
     }
+    
+    void addLeaf(Node node, String label, Polygon polygon) {
+        if (node.subnodes.size() == 0) { // if bottom level is reached -> create leaf
+            node.subnodes.add(new Node(label, polygon));
+        }
+        /*
+         * if size ( n . subnodes )==0 or (n . subnodes [0]).child == nullptr :
+         * # bottom level is reached -> create leaf
+         * n.subnodes.add(new Leaf(name,polygon))
+         * else : # still need to go deeper
+         * n = chooseNode ( node , polygon )
+         * new_node = addLeaf (n , label , polygon )
+         * if new_node != null :
+         * # a split occurred in addLeaf ,
+         * # a new node is added at this level
+         * subnodes . add ( new_node )
+         * expand node . mbr to include polygon
+         * 
+         * if size ( node . subnodes ) >= N :
+         * return split(node)
+         * else :
+         * return null
+         */
+
+    }
+
+
 }
