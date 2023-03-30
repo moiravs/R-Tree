@@ -4,6 +4,7 @@ import org.locationtech.jts.geom.Polygon;
 import java.awt.Color;
 import java.io.File;
 
+import org.apache.commons.lang3.ObjectUtils.Null;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 
@@ -29,7 +30,9 @@ import org.geotools.data.simple.SimpleFeatureIterator;
 import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
 
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
 
 import org.geotools.swing.JMapFrame;
 
@@ -59,7 +62,23 @@ public class RTree {
     }
 
     Node chooseNode(Node node, Polygon polygon) {
-        return node;
+        Node bestNode = node; // noeud correspondant au meilleur élargissement
+        int smallestEnlargement = 0;
+        while (node.label == "0"){ // not leaf
+            ArrayList<Node> subNodes = node.subnodes;
+            // élargissement du MBR
+
+            for (Node elem: subNodes)
+            {
+                int newEnlargement = 0; // on calcule jsp comment
+                if (newEnlargement < smallestEnlargement)
+                {
+                    smallestEnlargement = newEnlargement;
+                    bestNode = elem;
+                }
+            }
+        }
+        return bestNode;
     }
 
     Node search(Node node, Point point) { // appeller cette fonction avec la racine de l'arbre
