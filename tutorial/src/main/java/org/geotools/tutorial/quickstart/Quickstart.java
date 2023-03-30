@@ -142,36 +142,11 @@ public class Quickstart {
         Style style2 = SLD.createLineStyle(Color.red, 2.0f);
         Layer layer2 = new FeatureLayer(collection, style2);
         map.addLayer(layer2);
-        Node node = new Node("blabla", c);
 
         // Now display the map
         JMapFrame.showMap(map);
     }
-    
-    void addLeaf(Node node, String label, Polygon polygon) {
-        if (node.subnodes.size() == 0) { // if bottom level is reached -> create leaf
-            node.subnodes.add(new Node(label, polygon));
-        }
-        /*
-         * if size ( n . subnodes )==0 or (n . subnodes [0]).child == nullptr :
-         * # bottom level is reached -> create leaf
-         * n.subnodes.add(new Leaf(name,polygon))
-         * else : # still need to go deeper
-         * n = chooseNode ( node , polygon )
-         * new_node = addLeaf (n , label , polygon )
-         * if new_node != null :
-         * # a split occurred in addLeaf ,
-         * # a new node is added at this level
-         * subnodes . add ( new_node )
-         * expand node . mbr to include polygon
-         * 
-         * if size ( node . subnodes ) >= N :
-         * return split(node)
-         * else :
-         * return null
-         */
 
-    }
 
 
 }
