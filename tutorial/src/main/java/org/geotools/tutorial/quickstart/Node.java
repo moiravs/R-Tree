@@ -1,18 +1,27 @@
+/*
+ * Project : 
+ * Created Date: Friday, March 24th 2023, 4:42:12 pm
+ * Author: Moïra Vanderslagmolen & Andrius Ezerskis
+ */
+
 package org.geotools.tutorial.quickstart;
 
 import java.util.ArrayList;
 
+import org.geotools.geometry.util.XRectangle2D;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
 
 public class Node {
-    ArrayList<Node> subnodes = new ArrayList<Node>();
-    String label;
-    Geometry MBR;
-    Polygon polygon;
-    
-    public Node(String label, Polygon polygon) {
-        this.label = label;
-        this.polygon = polygon;
+  ArrayList<Node> subnodes = new ArrayList<Node>();
+  String label;
+  XRectangle2D MBR;
+  Polygon polygon;
+
+  public Node(){}
+
+  public Node(String label, Polygon polygon) {
+    this.label = label;
+    this.polygon = polygon;
   }
 }

@@ -1,3 +1,9 @@
+/*
+ * Project : 
+ * Date: Saturday, March 18th 2023, 5:42:19 pm
+ * Author: Moïra Vanderslagmolen & Andrius Ezerskis
+ */
+
 package org.geotools.tutorial.quickstart;
 
 import java.awt.Color;
