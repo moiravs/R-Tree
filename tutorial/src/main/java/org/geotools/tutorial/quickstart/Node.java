@@ -9,6 +9,7 @@ package org.geotools.tutorial.quickstart;
 import java.util.ArrayList;
 
 import org.geotools.geometry.util.XRectangle2D;
+import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
 
@@ -23,5 +24,10 @@ public class Node {
   public Node(String label, Polygon polygon) {
     this.label = label;
     this.polygon = polygon;
+    createMBR();
+  }
+  public void createMBR(){
+    Envelope mbr = polygon.getEnvelopeInternal();
+    MBR = XRectangle2D.createFromExtremums(mbr.getMinX(), mbr.getMinY(), mbr.getMaxX(), mbr.getMaxY());
   }
 }
