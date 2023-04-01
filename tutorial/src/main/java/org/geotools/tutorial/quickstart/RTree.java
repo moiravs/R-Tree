@@ -29,7 +29,7 @@ public class RTree {
                 if (polygon != null && root != null) {
                     String label = feature.getProperty("NAME_FR").getValue().toString();
                     addLeaf(new Node(label, polygon));
-                } else if (polygon != null && root == null){
+                } else if (polygon != null && root == null) {
                     String label = feature.getProperty("NAME_FR").getValue().toString();
                     root = new Node(label, polygon);
                 }
@@ -39,20 +39,20 @@ public class RTree {
     }
 
     Node addLeaf(Node nodeToAdd) {
-        if (root.subnodes.size() == 0 || root.subnodes.get(0).subnodes.size() == 0) { // if bottom level is reached -> create leaf
-            root.subnodes.add(nodeToAdd); // create leaf
-            expandMBR(root, nodeToAdd.MBR);
+        Node n = root;
+        if (n.subnodes.size() == 0 || n.subnodes.get(0).subnodes.size() == 0) { // if bottom level is reached -> create
+                                                                                // leaf
+            n.subnodes.add(nodeToAdd); // create leaf
         } else { // still need to go deeper
-            Node n = chooseNode(nodeToAdd, nodeToAdd.polygon);
+            n = chooseNode(nodeToAdd, nodeToAdd.polygon);
             Node new_node = addLeaf(nodeToAdd);
             if (new_node != null) { // a split occurred in addLeaf, a new node is added at this level
                 n.subnodes.add(new_node);
-                expandMBR(n, nodeToAdd.MBR);
             }
         }
-
-        if (nodeToAdd.subnodes.size() >= N) {
-            return splitQuadratique(nodeToAdd);
+        expandMBR(n, nodeToAdd.MBR);
+        if (n.subnodes.size() >= N) {
+            return splitQuadratique(n);
         }
         return null;
 
@@ -91,14 +91,15 @@ public class RTree {
     Node search(Node node, Point point) { // appeller cette fonction avec la racine de l'arbre
         if (node.subnodes.size() == 0) { // si c'est une feuille
             if (node.MBR.contains(point.getX(), point.getY())) {
-                return node; // Si le point appartient au MBR du nœud et le point appartient au polygone, retourner "this",
-            } 
+                return node; // Si le point appartient au MBR du nœud et le point appartient au polygone,
+                             // retourner "this",
+            }
         } else {
             if (node.MBR.contains(point.getX(), point.getY())) {
                 for (Node subnode : node.subnodes) {
                     return (search(subnode, point));
-                    }
                 }
+            }
         }
         return null;
     }
@@ -114,7 +115,7 @@ public class RTree {
      * @return
      */
     Node splitQuadratique(Node node) {
-        pickSeedsQuadratic();
+        pickSeedsQuadratic(node);
         return node;
     }
 
@@ -124,7 +125,7 @@ public class RTree {
      * @return
      */
     Node splitLinéaire(Node node) {
-        pickSeedsLinear();
+        pickSeedsLinear(node);
         return node;
     }
 
@@ -141,7 +142,7 @@ public class RTree {
      * 
      * @return
      */
-    ArrayList<Node> pickSeedsLinear() {
+    ArrayList<Node> pickSeedsLinear(Node node) {
         ArrayList<Node> seeds = new ArrayList<Node>();
         double bestMaxX = 0; // + petit possible
         double bestMinX = 100000; // + grand possible
@@ -151,26 +152,27 @@ public class RTree {
         Node bestSeed2 = new Node();
         Node bestSeed3 = new Node();
         Node bestSeed4 = new Node();
-        Node seed = new Node();
-        // for (node : RTree)
         // getMaxX doit être le + petit possible pr rect1
         // getMinX doit être le + grand possible pr rect2
-        if (seed.MBR.getMaxX() < bestMaxX) {
-            bestMaxX = seed.MBR.getMaxX();
-            bestSeed1 = seed;
-        }
-        if (seed.MBR.getMinX() > bestMinX) {
-            bestMaxX = seed.MBR.getMaxX();
-            bestSeed2 = seed;
-        }
+        for (Node seed : node.subnodes) {
 
-        if (seed.MBR.getMaxY() < bestMaxY) {
-            bestMaxY = seed.MBR.getMaxY();
-            bestSeed3 = seed;
-        }
-        if (seed.MBR.getMinY() > bestMinY) {
-            bestMaxY = seed.MBR.getMaxY();
-            bestSeed4 = seed;
+            if (seed.MBR.getMaxX() < bestMaxX) {
+                bestMaxX = seed.MBR.getMaxX();
+                bestSeed1 = seed;
+            }
+            if (seed.MBR.getMinX() > bestMinX) {
+                bestMaxX = seed.MBR.getMaxX();
+                bestSeed2 = seed;
+            }
+
+            if (seed.MBR.getMaxY() < bestMaxY) {
+                bestMaxY = seed.MBR.getMaxY();
+                bestSeed3 = seed;
+            }
+            if (seed.MBR.getMinY() > bestMinY) {
+                bestMaxY = seed.MBR.getMaxY();
+                bestSeed4 = seed;
+            }
         }
 
         // normalize
@@ -201,7 +203,7 @@ public class RTree {
      * 
      * @return
      */
-    ArrayList<Node> pickSeedsQuadratic() {
+    ArrayList<Node> pickSeedsQuadratic(Node node) {
         ArrayList<Node> seeds = new ArrayList<Node>();
         // parcourir tout l'arbre
         Node seed1 = new Node();
