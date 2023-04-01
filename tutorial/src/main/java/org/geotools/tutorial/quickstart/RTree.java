@@ -91,19 +91,14 @@ public class RTree {
     Node search(Node node, Point point) { // appeller cette fonction avec la racine de l'arbre
         if (node.subnodes.size() == 0) { // si c'est une feuille
             if (node.MBR.contains(point.getX(), point.getY())) {
-                return node; // Si le point appartient au MBR du nœud et le point appartient au polygone,
-                             // retourner "this",
-            } else {
-                return null;
-            }
+                return node; // Si le point appartient au MBR du nœud et le point appartient au polygone, retourner "this",
+            } 
         } else {
             if (node.MBR.contains(point.getX(), point.getY())) {
                 for (Node subnode : node.subnodes) {
-                    if (search(subnode, point) != null) {
-                        return node;
+                    return (search(subnode, point));
                     }
                 }
-            }
         }
         return null;
     }
