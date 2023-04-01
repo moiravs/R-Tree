@@ -6,40 +6,55 @@
 
 package org.geotools.tutorial.quickstart;
 
-import org.locationtech.jts.geom.Polygon;
+import org.opengis.feature.simple.SimpleFeature;
+import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.geometry.util.XRectangle2D;
-import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
+
 import java.util.ArrayList;
 
 public class RTree {
     private static final int N = 3;
+    Node root;
 
-    /**
-     * @param node
-     * @param label
-     * @param polygon
-     * @return Node
-     */
-    Node addLeaf(Node node, String label, Polygon polygon) {
-        if (node.subnodes.size() == 0) { // if bottom level is reached -> create leaf
-            node.subnodes.add(new Node(label, polygon)); // create leaf
+    Node createTree(SimpleFeatureCollection all_features) {
+
+        try (SimpleFeatureIterator iterator = all_features.features()) {
+            while (iterator.hasNext()) {
+                SimpleFeature feature = iterator.next();
+
+                MultiPolygon polygon = (MultiPolygon) feature.getDefaultGeometry();
+                if (polygon != null && root != null) {
+                    String label = feature.getProperty("NAME_FR").getValue().toString();
+                    addLeaf(new Node(label, polygon));
+                } else if (polygon != null && root == null){
+                    String label = feature.getProperty("NAME_FR").getValue().toString();
+                    root = new Node(label, polygon);
+                }
+            }
+        }
+        return null;
+    }
+
+    Node addLeaf(Node nodeToAdd) {
+        if (root.subnodes.size() == 0 || root.subnodes.get(0).subnodes.size() == 0) { // if bottom level is reached -> create leaf
+            root.subnodes.add(nodeToAdd); // create leaf
+            expandMBR(root, nodeToAdd.MBR);
         } else { // still need to go deeper
-            node = chooseNode(node, polygon);
-            Node new_node = addLeaf(node, label, polygon);
-            if (new_node != null) {
-                // a split occurred in addLeaf ,
-                // a new node is added at this level
-                node.subnodes.add(new_node);
-                // expand node . mbr to include polygon
+            Node n = chooseNode(nodeToAdd, nodeToAdd.polygon);
+            Node new_node = addLeaf(nodeToAdd);
+            if (new_node != null) { // a split occurred in addLeaf, a new node is added at this level
+                n.subnodes.add(new_node);
+                expandMBR(n, nodeToAdd.MBR);
             }
         }
 
-        if (node.subnodes.size() >= N) {
-            return splitQuadratique(node);
-        } else {
-            return null;
+        if (nodeToAdd.subnodes.size() >= N) {
+            return splitQuadratique(nodeToAdd);
         }
+        return null;
 
     }
 
@@ -48,7 +63,7 @@ public class RTree {
      * @param polygon
      * @return Node
      */
-    Node chooseNode(Node node, Polygon polygon) {
+    Node chooseNode(Node node, MultiPolygon polygon) {
 
         Node bestNode = node; // noeud correspondant au meilleur élargissement
         int smallestEnlargement = 0;
@@ -93,9 +108,9 @@ public class RTree {
         return null;
     }
 
-    void expandMBR(Node node, Polygon polygon) {
-        // expand node . mbr to include polygon???
-        // wtf am i suppose to do here
+    void expandMBR(Node node, XRectangle2D MBR) {
+        XRectangle2D newMBR = (XRectangle2D) node.MBR.createUnion(MBR);
+        node.MBR = newMBR;
     }
 
     /**
@@ -176,8 +191,7 @@ public class RTree {
         if (separation > separation2) {
             seeds.add(bestSeed1);
             seeds.add(bestSeed2);
-        }
-        else {
+        } else {
             seeds.add(bestSeed3);
             seeds.add(bestSeed4);
         }

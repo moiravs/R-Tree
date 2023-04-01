@@ -86,6 +86,8 @@ public class Quickstart {
         // Point p = gb.point(r.nextInt((int) global_bounds.getMinX(), (int)
         // global_bounds.getMaxX()),
         // r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
+        RTree rtree = new RTree();
+        rtree.createTree(all_features);
 
         SimpleFeature target = null;
 
