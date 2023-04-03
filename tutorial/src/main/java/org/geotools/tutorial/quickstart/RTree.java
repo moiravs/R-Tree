@@ -17,6 +17,8 @@ import java.util.ArrayList;
 
 public class RTree {
     private static final int N = 3;
+    private static double smallestEnlargementArea = 0;
+    Node bestNode; // noeud correspondant au meilleur élargissement
     Node root;
     Node n;
 
@@ -55,7 +57,6 @@ public class RTree {
             return splitQuadratique(n);
         }
         return null;
-
     }
 
     /**
@@ -64,19 +65,23 @@ public class RTree {
      * @return Node
      */
     Node chooseNode(Node node, MultiPolygon polygon) {
-
-        Node bestNode = node; // noeud correspondant au meilleur élargissement
-        int smallestEnlargement = 0;
-        while (node.label == "0") { // not leaf
+        while (!(node.subnodes.isEmpty())) // not leaf
+        { 
             ArrayList<Node> subNodes = node.subnodes;
             // élargissement du MBR
-
             for (Node elem : subNodes) {
-                int newEnlargement = 0; // on calcule jsp comment
-                if (newEnlargement < smallestEnlargement) {
-                    smallestEnlargement = newEnlargement;
+                double enlargementArea = elem.MBR.getWidth() * elem.MBR.getHeight();
+                if (enlargementArea < smallestEnlargementArea) {
+                    smallestEnlargementArea = enlargementArea;
                     bestNode = elem;
                 }
+            }
+        }
+        for (Node elem : node.subnodes) 
+        {
+            if (!(elem.subnodes.isEmpty()))
+            {
+                chooseNode(elem, polygon);
             }
         }
         return bestNode;
@@ -124,7 +129,7 @@ public class RTree {
      * @param node
      * @return
      */
-    Node splitLinéaire(Node node) {
+    Node splitLineaire(Node node) {
         pickSeedsLinear(node);
         return node;
     }
