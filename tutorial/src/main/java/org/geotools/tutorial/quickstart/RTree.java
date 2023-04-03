@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class RTree {
     private static final int N = 3;
     Node root;
+    Node n;
 
     Node createTree(SimpleFeatureCollection all_features) {
 
@@ -28,6 +29,7 @@ public class RTree {
                 MultiPolygon polygon = (MultiPolygon) feature.getDefaultGeometry();
                 if (polygon != null && root != null) {
                     String label = feature.getProperty("NAME_FR").getValue().toString();
+                    n = root;
                     addLeaf(new Node(label, polygon));
                 } else if (polygon != null && root == null) {
                     String label = feature.getProperty("NAME_FR").getValue().toString();
@@ -39,9 +41,7 @@ public class RTree {
     }
 
     Node addLeaf(Node nodeToAdd) {
-        Node n = root;
-        if (n.subnodes.size() == 0 || n.subnodes.get(0).subnodes.size() == 0) { // if bottom level is reached -> create
-                                                                                // leaf
+        if (n.subnodes.size() == 0 || n.subnodes.get(0).subnodes.size() == 0) { // if bottom level is reached -> create                                                             // leaf
             n.subnodes.add(nodeToAdd); // create leaf
         } else { // still need to go deeper
             n = chooseNode(nodeToAdd, nodeToAdd.polygon);
