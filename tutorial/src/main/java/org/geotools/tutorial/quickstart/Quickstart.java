@@ -55,6 +55,7 @@ public class Quickstart {
      */
     public static void main(String[] args) throws Exception {
         // display a data store file chooser dialog for shapefiles
+        
         String filename = "../tutorial/maps/sh_statbel_statistical_sectors_31370_20220101.shp";
 
         File file = new File(filename);
@@ -63,31 +64,35 @@ public class Quickstart {
 
         FileDataStore store = FileDataStoreFinder.getDataStore(file);
         SimpleFeatureSource featureSource = store.getFeatureSource();
-
         SimpleFeatureCollection all_features = featureSource.getFeatures();
 
-        store.dispose();
 
         ReferencedEnvelope global_bounds = featureSource.getBounds();
 
         Random r = new Random();
 
         GeometryBuilder gb = new GeometryBuilder();
-        Point p = gb.point(152183, 167679);// Plaine
+        //Point p = gb.point(152183, 167679);// Plaine
         // Point p = gb.point(4.4, 50.8);//
         // Point p = gb.point(58.0, 47.0);
-        // Point p = gb.point(10.6,59.9);// Oslo
+        //Point p = gb.point(10.6,59.9);// Oslo
+        //Point p = gb.point(-119.0, 56.0);
 
         // Point p = gb.point(-70.9,-33.4);// Santiago
         // Point p = gb.point(169.2, -52.5);//NZ
 
         // Point p = gb.point(172.97365198326708, 1.8869725782923172);
 
-        // Point p = gb.point(r.nextInt((int) global_bounds.getMinX(), (int)
-        // global_bounds.getMaxX()),
-        // r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
+        Point p = gb.point(r.nextInt((int) global_bounds.getMinX(), (int)global_bounds.getMaxX()),r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
+        System.out.println("point X: "+ p.getX() + "point Y:" + p.getY());
         RTree rtree = new RTree();
-        rtree.createTree(all_features);
+        rtree.createTree(filename, "T_SEC_FR");
+        rtree.printTree(rtree.root);
+        Node node = rtree.search(rtree.root, p);
+        if (node != null)
+            System.out.println(" node found = " + node.label);
+        else 
+            System.out.println("Point not in any polygon");
 
         SimpleFeature target = null;
 
@@ -155,6 +160,7 @@ public class Quickstart {
         JMapFrame.showMap(map);
     }
 
+    
 
 
 }

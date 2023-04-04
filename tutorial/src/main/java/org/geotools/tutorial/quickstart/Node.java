@@ -16,11 +16,22 @@ import org.locationtech.jts.geom.Polygon;
 
 public class Node {
   ArrayList<Node> subnodes = new ArrayList<Node>();
-  String label;
-  XRectangle2D MBR;
+  public String label;
+  Envelope MBR;
   MultiPolygon polygon;
+  Node parent;
 
-  public Node(){}
+  public Node(){
+    this.label = "root";
+    MBR = new Envelope(0, 0, 0, 0);
+  }
+
+  public Node(Node node){
+    this.label = node.label;
+    this.MBR = node.MBR;
+    this.polygon = node.polygon;
+    this.parent = node.parent;
+  }
 
   public Node(String label, MultiPolygon polygon) {
     this.label = label;
@@ -28,7 +39,6 @@ public class Node {
     createMBR();
   }
   public void createMBR(){
-    Envelope mbr = polygon.getEnvelopeInternal();
-    MBR = XRectangle2D.createFromExtremums(mbr.getMinX(), mbr.getMinY(), mbr.getMaxX(), mbr.getMaxY());
+    MBR = polygon.getEnvelopeInternal();
   }
 }
