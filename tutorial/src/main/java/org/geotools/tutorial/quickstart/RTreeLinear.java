@@ -23,11 +23,9 @@ public class RTreeLinear implements RTree {
     private static double smallestEnlargementArea = Double.POSITIVE_INFINITY;
     public MBRNode root = new MBRNode("root");
     MBRNode searchNode;
-    public String algorithm;
 
     public RTreeLinear(String filename, String valueProperty) throws IOException {
         int i = 0;
-        algorithm = "Linear";
         File file = new File(filename);
         if (!file.exists())
             throw new RuntimeException("Shapefile does not exist.");
@@ -48,7 +46,6 @@ public class RTreeLinear implements RTree {
                     try {
                         addLeaf(root, nodeToAdd);
                         // System.out.println("Start for: " + nodeToAdd.label);
-
                         // root.print(1);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -113,7 +110,7 @@ public class RTreeLinear implements RTree {
     public MBRNode search(MBRNode node, Point point) { // appeller cette fonction avec la racine de l'arbre
         if (node.subnodes.size() == 0) { // si c'est une feuille
             if (node.MBR.contains(point.getX(), point.getY())) {
-                // System.out.println(node.label);
+                System.out.println(node.label);
                 if (node.polygon.contains(point)) {
                     return node;
                 }
