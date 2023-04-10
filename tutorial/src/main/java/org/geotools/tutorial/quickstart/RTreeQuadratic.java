@@ -1,15 +1,11 @@
 package org.geotools.tutorial.quickstart;
 
 import org.opengis.feature.simple.SimpleFeature;
-
-import jj2000.j2k.util.ArrayUtil;
-
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
-import org.geotools.geometry.util.XRectangle2D;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
@@ -17,17 +13,14 @@ import org.locationtech.jts.geom.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
-public class RTreeLinear implements RTree {
+public class RTreeQuadratic implements RTree {
     private static final int N = 4;
     private static double smallestEnlargementArea = Double.POSITIVE_INFINITY;
     public MBRNode root = new MBRNode("root");
     MBRNode searchNode;
-    public String algorithm;
 
-    public RTreeLinear(String filename, String valueProperty) throws IOException {
+    public RTreeQuadratic(String filename, String valueProperty) throws IOException {
         int i = 0;
-        algorithm = "Linear";
         File file = new File(filename);
         if (!file.exists())
             throw new RuntimeException("Shapefile does not exist.");
@@ -143,12 +136,21 @@ public class RTreeLinear implements RTree {
      * 
      * @param node
      * @return
+     */
+    MBRNode splitQuadratique(MBRNode node) {
+        pickSeeds(node);
+        return node;
+    }
+
+    /**
+     * 
+     * @param node
+     * @return
      * @throws Exception
      */
     public MBRNode split(MBRNode node) throws Exception {
         ArrayList<MBRNode> copiedSubnodes = new ArrayList<MBRNode>(node.subnodes);
-        ArrayList<MBRNode> splitSeeds;
-        splitSeeds = pickSeeds(node);
+        ArrayList<MBRNode> splitSeeds = pickSeeds(node);
         if (splitSeeds != null) {
             node.subnodes = new ArrayList<MBRNode>();
             splitSeeds.get(0).parent = node;
@@ -160,85 +162,6 @@ public class RTreeLinear implements RTree {
         return node;
     }
 
-    /**
-     * trouver l'entrée dont le rectangle a
-     * le côté bas le plus élevé, et celui
-     * avec le côté haut le plus bas Enregistrez la séparation.
-     * 
-     * Normalize the separations
-     * by dividing by the width of the entire
-     * set
-     * 
-     * Choisir la pair avec la plus grande normalized séparation
-     * 
-     * @return
-     * @throws Exception
-     */
-    public ArrayList<MBRNode> pickSeeds(MBRNode node) throws Exception {
-        double bestMaxX = Double.POSITIVE_INFINITY; // + petit possible
-        double bestMinX = Double.NEGATIVE_INFINITY; // + grand possible
-        double bestMaxY = Double.POSITIVE_INFINITY; // + petit possible
-        double bestMinY = Double.NEGATIVE_INFINITY; // + grand possible
-        Envelope MBRBestMaxX = new Envelope();
-        Envelope MBRBestMinX = new Envelope();
-        Envelope MBRBestMaxY = new Envelope();
-        Envelope MBRBestMinY = new Envelope();
-
-        // getMaxX doit être le + petit possible pr rect1
-        // getMinX doit être le + grand possible pr rect2
-        for (MBRNode seed : node.subnodes) {
-            if (seed.MBR.getMaxX() < bestMaxX) {
-                bestMaxX = seed.MBR.getMaxX();
-                MBRBestMaxX = seed.MBR;
-            }
-            if (seed.MBR.getMinX() > bestMinX) {
-                bestMinX = seed.MBR.getMinX();
-                MBRBestMinX = seed.MBR;
-            }
-
-            if (seed.MBR.getMaxY() < bestMaxY) {
-                bestMaxY = seed.MBR.getMaxY();
-                MBRBestMaxY = seed.MBR;
-            }
-            if (seed.MBR.getMinY() > bestMinY) {
-                bestMinY = seed.MBR.getMinY();
-                MBRBestMinY = seed.MBR;
-            }
-        }
-
-        // normalize
-        ArrayList<MBRNode> foundSeeds = new ArrayList<MBRNode>();
-        if (MBRBestMinY == MBRBestMaxY && MBRBestMaxX == MBRBestMinX) {
-            return null;
-        } else if (MBRBestMinY == MBRBestMaxY) {
-            foundSeeds.add(new MBRNode(MBRBestMinX));
-            foundSeeds.add(new MBRNode(MBRBestMaxX));
-        } else if (MBRBestMinX == MBRBestMaxX) {
-
-            foundSeeds.add(new MBRNode(MBRBestMinY));
-            foundSeeds.add(new MBRNode(MBRBestMaxY));
-        } else {
-            double widthInner = MBRBestMinX.getMaxX() - MBRBestMaxX.getMinX();
-            double widthOuter = MBRBestMinX.getMinX() - MBRBestMaxX.getMaxX();
-            double separationWidth = widthInner / widthOuter;
-
-            double heightInner = MBRBestMinY.getMaxY() - MBRBestMaxY.getMinY();
-            double heightOuter = MBRBestMinY.getMinY() - MBRBestMaxY.getMaxY();
-            double separationHeight = heightInner / heightOuter;
-            if (separationWidth > separationHeight) {
-
-                foundSeeds.add(new MBRNode(MBRBestMinX));
-                foundSeeds.add(new MBRNode(MBRBestMaxX));
-
-            } else {
-
-                foundSeeds.add(new MBRNode(MBRBestMinY));
-                foundSeeds.add(new MBRNode(MBRBestMaxY));
-            }
-        }
-
-        return foundSeeds;
-    }
 
     public void pickNext(MBRNode splitSeed1, MBRNode splitSeed2, ArrayList<MBRNode> copiedSubnodes) {
         for (MBRNode subnode : copiedSubnodes) {
@@ -271,4 +194,62 @@ public class RTreeLinear implements RTree {
 
     }
 
+    /**
+     * For each pair of Entries compose a rectangle and pick the one with largest d
+     * Choisir les deux seeds les + éloignées possibles
+     * pair with de largest d, d = area(J) - area(E1*I) - area(E2*I)
+     * 
+     * @return
+     */
+    public ArrayList<MBRNode> pickSeeds(MBRNode node) {
+        /*
+         * ArrayList<MBRNode> seeds = new ArrayList<MBRNode>();
+         * // parcourir tout l'arbre
+         * MBRNode seed1 = new MBRNode("seed1");
+         * MBRNode seed2 = new MBRNode("seed2");
+         * 
+         * // créer un rectangle avec les MBR des nodes dedans
+         * double rectangleMinX = Double.min(seed1.MBR.getMinX(), seed2.MBR.getMinX());
+         * double rectangleMaxX = Double.max(seed1.MBR.getMaxX(), seed2.MBR.getMaxX());
+         * double rectangleMinY = Double.min(seed1.MBR.getMinY(), seed2.MBR.getMinY());
+         * double rectangleMaxY = Double.max(seed1.MBR.getMaxY(), seed2.MBR.getMaxY());
+         * 
+         * XRectangle2D rect = XRectangle2D.createFromExtremums(rectangleMinX,
+         * rectangleMinY, rectangleMaxX,
+         * rectangleMaxY);
+         * // avoir l'area du rectangle - l'aire des deux MBR des nodes
+         * // double area = rect.getHeight() * rect.getWidth()
+         * // - (seed1.MBR.getHeight() * seed1.MBR.getWidth() + seed2.MBR.getHeight()
+         * // * seed2.MBR.getWidth());
+         * // comparer avec le meilleur rectangle
+         * 
+         * // return les seeds correspondant au plus grand area
+         * return seeds;
+         */
+        double maxArea = 0;
+        int M = node.subnodes.size();
+        MBRNode s, t;
+        s = new MBRNode(node);
+        t = new MBRNode(node);
+        ArrayList<MBRNode> seeds = new ArrayList<MBRNode>();
+        seeds.add(s);
+        seeds.add(t);
+        for (int i = 1; i < M; i++) {
+            for (int j = i + 1; j < M + 1; j++) {
+                Envelope r = new Envelope(node.MBR);
+                expandMBR(node.subnodes.get(i), r);
+                double area = r.getArea() - node.subnodes.get(i).MBR.getArea() - node.subnodes.get(j).MBR.getArea();
+                if (area > maxArea) {
+                    maxArea = area;
+                    s = node.subnodes.get(i);
+                    t = node.subnodes.get(j);
+                }
+            }
+        }
+        return seeds;
+    }
+
+    void distributeQuadratic(MBRNode node, MBRNode node1, MBRNode node2) {
+
+    }
 }

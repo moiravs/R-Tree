@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import org.geotools.geometry.jts.GeometryBuilder;
 import org.geotools.tutorial.quickstart.MBRNode;
-import org.geotools.tutorial.quickstart.RTree;
+import org.geotools.tutorial.quickstart.RTreeLinear;
 import org.junit.Test;
 import org.locationtech.jts.geom.Point;
 
@@ -24,7 +24,7 @@ public class AppTest {
             throw new RuntimeException("Shapefile does not exist.");
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(-119.0, 56.0);
-        RTree rtree = new RTree(filename, "NAME_FR");
+        RTreeLinear rtree = new RTreeLinear(filename, "NAME_FR");
         MBRNode node = rtree.search(rtree.root, p);
         if (node != null)
             System.out.println(" node found = " + node.label);
@@ -42,7 +42,7 @@ public class AppTest {
         GeometryBuilder gb = new GeometryBuilder();
         // Point p = gb.point(-119.0, 56.0);
         Point p = gb.point(152183, 167679);// Plaine
-        RTree rtree = new RTree(filename, "T_SEC_FR");
+        RTreeLinear rtree = new RTreeLinear(filename, "T_SEC_FR");
         MBRNode node = rtree.search(rtree.root, p);
         if (node != null)
             System.out.println(" node found =" + node.label + "end");
@@ -59,7 +59,7 @@ public class AppTest {
             throw new RuntimeException("Shapefile does not exist.");
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(215113.0, 217404.0);// Plaine
-        RTree rtree = new RTree(filename, "T_SEC_FR");
+        RTreeLinear rtree = new RTreeLinear(filename, "T_SEC_FR");
         MBRNode node = rtree.search(rtree.root, p);
         if (node != null)
             System.out.println(" node found = " + node.label);
@@ -76,7 +76,7 @@ public class AppTest {
             throw new RuntimeException("Shapefile does not exist.");
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(73.0, 43.0);// Plaine
-        RTree rtree = new RTree(filename, "T_SEC_FR");
+        RTreeLinear rtree = new RTreeLinear(filename, "T_SEC_FR");
         MBRNode node = rtree.search(rtree.root, p);
         if (node != null)
             System.out.println(" node found = " + node.label);
