@@ -12,30 +12,27 @@ import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
-import org.geotools.geometry.GeometryBuilder;
 import org.geotools.geometry.util.XRectangle2D;
 import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.Polygon;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class RTree {
-    private static final int N = 3;
-    private static double smallestEnlargementArea = 100000;
-    Node bestNode; // noeud correspondant au meilleur élargissement
-    public Node root;
-    Node n;
-    Node searchNode;
-    Node chosenNode;
+    private static final int N = 4;
+    private static double smallestEnlargementArea = Double.POSITIVE_INFINITY;
+    MBRNode bestNode; // noeud correspondant au meilleur élargissement
+    public MBRNode root;
+    MBRNode n;
+    MBRNode searchNode;
+    MBRNode chosenNode;
 
-    public Node createTree(String filename, String valueProperty) throws IOException {
+    public MBRNode createTree(String filename, String valueProperty) throws IOException {
         int i = 0;
-        root = new Node();
+        root = new MBRNode();
         File file = new File(filename);
         if (!file.exists())
             throw new RuntimeException("Shapefile does not exist.");
@@ -50,30 +47,34 @@ public class RTree {
                 SimpleFeature feature = iterator.next();
 
                 MultiPolygon polygon = (MultiPolygon) feature.getDefaultGeometry();
-                if (polygon != null && root != null) {
+                if (polygon != null && root != null && i != 6) {
                     String label = feature.getProperty(valueProperty).getValue().toString();
-                    n = root;
-                    Node nodeToAdd = new Node(label, polygon);
-                    addLeaf(nodeToAdd);
+                    MBRNode nodeToAdd = new MBRNode(label, polygon);
+                    System.out.println("start");
+                    root.print(1);
+                    System.out.println("end");
+                    addLeaf(root, nodeToAdd);
+                    i++;
                 }
             }
         }
+
         return null;
     }
 
-    Node addLeaf(Node nodeToAdd) {
+    MBRNode addLeaf(MBRNode n, MBRNode nodeToAdd) {
         if (n.subnodes.size() == 0 || n.subnodes.get(0).subnodes.size() == 0) { // if bottom level is reached -> create
             n.subnodes.add(nodeToAdd); // create leaf
             nodeToAdd.parent = n;
         } else { // still need to go deeper
-            System.out.println("hereAHHH");
-            chosenNode = root;
-            chooseNode(nodeToAdd, nodeToAdd.polygon);
-            n = bestNode;
-            Node new_node = addLeaf(nodeToAdd);
+            n = chooseNode(root, nodeToAdd, nodeToAdd.polygon);
+            MBRNode new_node = addLeaf(n, nodeToAdd);
             if (new_node != null) { // a split occurred in addLeaf, a new node is added at this level
+                new_node.label = "splitNode";
                 n.subnodes.add(new_node);
-                nodeToAdd.parent = n;
+                new_node.parent = n;
+                nodeToAdd.parent = new_node;
+                // expandMBR(new_node, nodeToAdd.MBR);
             }
         }
         expandMBR(n, nodeToAdd.MBR);
@@ -87,24 +88,27 @@ public class RTree {
     /**
      * @param node
      * @param polygon
-     * @return Node
+     * @return MBRNode
      */
-    void chooseNode(Node nodeToAdd, MultiPolygon polygon) {
-        while (!(chosenNode.subnodes.isEmpty())) // not leaf
-        {
-            for (Node elem : chosenNode.subnodes) {
-                chosenNode = elem;
-                chooseNode(nodeToAdd, polygon);
-            }
+    MBRNode chooseNode(MBRNode bestNode, MBRNode nodeToAdd, MultiPolygon polygon) {
+
+        if (bestNode.subnodes.size() == 0) {
+            return bestNode;
         }
         // calculate expansion
-        Node copiedNode = new Node(chosenNode);
-        copiedNode.MBR.expandToInclude(nodeToAdd.MBR);
-        double enlargementArea = (copiedNode.MBR.getWidth() * copiedNode.MBR.getHeight())
-                - (nodeToAdd.MBR.getWidth() * nodeToAdd.MBR.getHeight());
-        if (enlargementArea < smallestEnlargementArea) {
-            smallestEnlargementArea = enlargementArea;
-            bestNode = chosenNode;
+        else {
+            MBRNode bestChildNode = new MBRNode("SplitNode");
+            for (MBRNode subnode : bestNode.subnodes) {
+
+                MBRNode copiedNode = new MBRNode(subnode);
+                copiedNode.MBR.expandToInclude(nodeToAdd.MBR);
+                double enlargementArea = (copiedNode.MBR.getArea() - nodeToAdd.MBR.getArea());
+                if (enlargementArea < smallestEnlargementArea) {
+                    smallestEnlargementArea = enlargementArea;
+                    bestChildNode = subnode;
+                }
+            }
+            return chooseNode(bestChildNode, nodeToAdd, polygon);
         }
     }
 
@@ -114,21 +118,17 @@ public class RTree {
      * @param point
      * @return
      */
-    public Node search(Node node, Point point) { // appeller cette fonction avec la racine de l'arbre
+    public MBRNode search(MBRNode node, Point point) { // appeller cette fonction avec la racine de l'arbre
         if (node.subnodes.size() == 0) { // si c'est une feuille
             if (node.MBR.contains(point.getX(), point.getY())) {
                 if (node.polygon.contains(point)) {
-                    System.out.println("jpasse par ici haha");
-                    System.out.println(node.label);
                     return node;
                 }
             }
         } else {
-            System.out.println("Surujefjo");
             if (node.MBR.contains(point.getX(), point.getY())) {
-                System.out.println("rrrrrr");
-                for (Node subnode : node.subnodes) {
-                    Node nodeFound = search(subnode, point);
+                for (MBRNode subnode : node.subnodes) {
+                    MBRNode nodeFound = search(subnode, point);
                     if (nodeFound != null)
                         return nodeFound;
                 }
@@ -138,11 +138,12 @@ public class RTree {
         return null;
     }
 
-    void expandMBR(Node node, Envelope MBR) {
+    Boolean expandMBR(MBRNode node, Envelope MBR) {
         node.MBR.expandToInclude(MBR);
-        while (node != root) {
-            expandMBR(node.parent, MBR);
+        while (node.label != "root") {
+            return expandMBR(node.parent, MBR);
         }
+        return true;
     }
 
     /**
@@ -150,7 +151,7 @@ public class RTree {
      * @param node
      * @return
      */
-    Node splitQuadratique(Node node) {
+    MBRNode splitQuadratique(MBRNode node) {
         pickSeedsQuadratic(node);
         return node;
     }
@@ -160,10 +161,25 @@ public class RTree {
      * @param node
      * @return
      */
-    Node splitLineaire(Node node) {
-        System.out.println("coincé ici");
-        ArrayList<Node> seeds = pickSeedsLinear(node);
-        //pickNext(seeds.get(0), seeds.get(1), node);
+    MBRNode splitLineaire(MBRNode node) {
+        System.out.println("label that must be root" + node.label);
+        System.out.println("before");
+        root.print(1);
+        ArrayList<MBRNode> copiedSubnodes = new ArrayList<MBRNode>(node.subnodes);
+        ArrayList<MBRNode> splitSeeds = pickSeedsLinear(node);
+        node.subnodes = new ArrayList<MBRNode>();
+        splitSeeds.get(0).parent = node;
+        splitSeeds.get(1).parent = node;
+        node.subnodes.add(splitSeeds.get(0));
+        node.subnodes.add(splitSeeds.get(1));
+        System.out.println("pendant");
+        root.print(1);
+        pickNext(splitSeeds.get(0), splitSeeds.get(1), copiedSubnodes);
+
+        System.out.println("after");
+
+        root.print(1);
+
         return node;
     }
 
@@ -180,78 +196,102 @@ public class RTree {
      * 
      * @return
      */
-    ArrayList<Node> pickSeedsLinear(Node node) {
-        ArrayList<Node> seeds = new ArrayList<Node>();
-        double bestMaxX = 0; // + petit possible
-        double bestMinX = 100000; // + grand possible
-        double bestMaxY = 0; // + petit possible
-        double bestMinY = 100000; // + grand possible
-        Node bestSeed1 = new Node();
-        Node bestSeed2 = new Node();
-        Node bestSeed3 = new Node();
-        Node bestSeed4 = new Node();
+    ArrayList<MBRNode> pickSeedsLinear(MBRNode node) {
+        double bestMaxX = Double.POSITIVE_INFINITY; // + petit possible
+        double bestMinX = Double.NEGATIVE_INFINITY; // + grand possible
+        double bestMaxY = Double.POSITIVE_INFINITY; // + petit possible
+        double bestMinY = Double.NEGATIVE_INFINITY; // + grand possible
+        Envelope MBRBestMaxX = new Envelope();
+        Envelope MBRBestMinX = new Envelope();
+        Envelope MBRBestMaxY = new Envelope();
+        Envelope MBRBestMinY = new Envelope();
+
         // getMaxX doit être le + petit possible pr rect1
         // getMinX doit être le + grand possible pr rect2
-        for (Node seed : node.subnodes) {
-
+        for (MBRNode seed : node.subnodes) {
             if (seed.MBR.getMaxX() < bestMaxX) {
                 bestMaxX = seed.MBR.getMaxX();
-                bestSeed1 = seed;
+                System.out.println("best1" + seed.label);
+                MBRBestMaxX = seed.MBR;
+
             }
             if (seed.MBR.getMinX() > bestMinX) {
-                bestMaxX = seed.MBR.getMaxX();
-                bestSeed2 = seed;
+                System.out.println("best2" + seed.label);
+
+                bestMinX = seed.MBR.getMinX();
+                MBRBestMinX = seed.MBR;
+
             }
 
             if (seed.MBR.getMaxY() < bestMaxY) {
                 bestMaxY = seed.MBR.getMaxY();
-                bestSeed3 = seed;
+                System.out.println("best3" + seed.label);
+
+                MBRBestMaxY = seed.MBR;
+
             }
             if (seed.MBR.getMinY() > bestMinY) {
-                bestMaxY = seed.MBR.getMaxY();
-                bestSeed4 = seed;
+                System.out.println("best4" + seed.label);
+
+                bestMinY = seed.MBR.getMinY();
+                MBRBestMinY = seed.MBR;
+
             }
         }
 
         // normalize
-        double widthW = bestSeed2.MBR.getMaxX() - bestSeed1.MBR.getMinX();
-        double widthL = bestSeed2.MBR.getMinX() - bestSeed1.MBR.getMaxX();
-        double separation = widthL / widthW;
+        double widthInner = MBRBestMinX.getMaxX() - MBRBestMaxX.getMinX();
+        double widthOuter = MBRBestMinX.getMinX() - MBRBestMaxX.getMaxX();
+        double separationWidth = widthInner / widthOuter;
 
-        double widthW2 = bestSeed4.MBR.getMaxX() - bestSeed3.MBR.getMinX();
-        double widthL2 = bestSeed4.MBR.getMinX() - bestSeed3.MBR.getMaxX();
-        double separation2 = widthL2 / widthW2;
+        double heightInner = MBRBestMinY.getMaxY() - MBRBestMaxY.getMinY();
+        double heightOuter = MBRBestMinY.getMinY() - MBRBestMaxY.getMaxY();
+        double separationHeight = heightInner / heightOuter;
+        ArrayList<MBRNode> foundSeeds = new ArrayList<MBRNode>();
 
-        // choose the greatest separation
-        if (separation > separation2) {
-            seeds.add(bestSeed1);
-            seeds.add(bestSeed2);
+        if (separationWidth > separationHeight) {
+            foundSeeds.add(new MBRNode(MBRBestMinX));
+            foundSeeds.add(new MBRNode(MBRBestMaxX));
+
+            System.out.println("seed best max x:" + MBRBestMaxX);
+
+            System.out.println("seed best min x:" + MBRBestMinX);
+
         } else {
-            seeds.add(bestSeed3);
-            seeds.add(bestSeed4);
+            foundSeeds.add(new MBRNode(MBRBestMinY));
+            foundSeeds.add(new MBRNode(MBRBestMaxY));
+
+            System.out.println("seed best max y:" + MBRBestMaxY);
+
+            System.out.println("seed best min y:" + MBRBestMinY);
         }
 
-        return seeds;
+        return foundSeeds;
     }
 
-    void pickNext(Node seed1, Node seed2, Node nodeToSplit) {
-        for (Node subnode : nodeToSplit.subnodes) {
-            //puts("eaccc");
-            if (seed1 != subnode && seed2 != subnode) {
-                Node copiedNode = new Node(seed1);
-                Node copiedNode2 = new Node(seed2);
-                copiedNode.MBR.expandToInclude(subnode.MBR);
-                copiedNode2.MBR.expandToInclude(subnode.MBR);
-                if (copiedNode.MBR.getArea() > copiedNode2.MBR.getArea()) {
-                    seed2.subnodes.add(subnode);
-                    expandMBR(seed2, subnode.MBR);
-                    subnode.parent = seed2;
-                } else {
-                    seed1.subnodes.add(subnode);
-                    expandMBR(seed1, subnode.MBR);
-                    subnode.parent = seed1;
-                }
-                nodeToSplit.subnodes.remove(subnode);
+    void pickNext(MBRNode splitSeed1, MBRNode splitSeed2, ArrayList<MBRNode> copiedSubnodes) {
+        for (MBRNode subnode : copiedSubnodes) {
+
+            Envelope expandedMBR1 = new Envelope(splitSeed1.MBR);
+            Envelope expandedMBR2 = new Envelope(splitSeed2.MBR);
+
+            expandedMBR1.expandToInclude(subnode.MBR);
+            expandedMBR2.expandToInclude(subnode.MBR);
+            if (expandedMBR1.getArea() - splitSeed1.MBR.getArea() > expandedMBR2.getArea()
+                    - splitSeed2.MBR.getArea()) {
+                splitSeed2.subnodes.add(subnode);
+                subnode.parent = splitSeed2;
+                splitSeed2.MBR.expandToInclude(subnode.MBR);
+            } else {
+                splitSeed1.subnodes.add(subnode);
+                subnode.parent = splitSeed1;
+                Double blu = splitSeed1.MBR.getArea();
+                System.out.println(subnode.label + " " + blu);
+                // expandMBR(seed1, subnode.MBR);
+                // splitSeed1.MBR.expandToInclude(subnode.MBR);
+                Double blu2 = splitSeed1.MBR.getArea();
+                System.out.println(subnode.label + " 2 " + blu2);
+                splitSeed1.MBR.expandToInclude(subnode.MBR);
             }
         }
 
@@ -264,11 +304,11 @@ public class RTree {
      * 
      * @return
      */
-    ArrayList<Node> pickSeedsQuadratic(Node node) {
-        ArrayList<Node> seeds = new ArrayList<Node>();
+    ArrayList<MBRNode> pickSeedsQuadratic(MBRNode node) {
+        ArrayList<MBRNode> seeds = new ArrayList<MBRNode>();
         // parcourir tout l'arbre
-        Node seed1 = new Node();
-        Node seed2 = new Node();
+        MBRNode seed1 = new MBRNode();
+        MBRNode seed2 = new MBRNode();
 
         // créer un rectangle avec les MBR des nodes dedans
         double rectangleMinX = Double.min(seed1.MBR.getMinX(), seed2.MBR.getMinX());
@@ -288,14 +328,4 @@ public class RTree {
         return seeds;
     }
 
-    public void printTree(Node node) {
-        System.out.println("kids");
-        for (int i = 0; i < node.subnodes.size(); i++) {
-            // System.out.println("which node " + node.subnodes.get(i).label);
-            if (node.subnodes.get(i).subnodes.size() != 0) {
-                System.out.println("wtf it has kids");
-                printTree(node.subnodes.get(i));
-            }
-        }
-    }
 }

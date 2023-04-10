@@ -8,37 +8,55 @@ package org.geotools.tutorial.quickstart;
 
 import java.util.ArrayList;
 
-import org.geotools.geometry.util.XRectangle2D;
 import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.MultiPolygon;
-import org.locationtech.jts.geom.Polygon;
 
-public class Node {
-  ArrayList<Node> subnodes = new ArrayList<Node>();
+public class MBRNode {
+  ArrayList<MBRNode> subnodes = new ArrayList<MBRNode>();
   public String label;
   Envelope MBR;
   MultiPolygon polygon;
-  Node parent;
+  MBRNode parent;
 
-  public Node(){
+  public MBRNode() {
     this.label = "root";
     MBR = new Envelope(0, 0, 0, 0);
   }
 
-  public Node(Node node){
+  public MBRNode(MBRNode node) {
     this.label = node.label;
     this.MBR = node.MBR;
     this.polygon = node.polygon;
     this.parent = node.parent;
   }
 
-  public Node(String label, MultiPolygon polygon) {
+  public MBRNode(Envelope MBR) {
+    this.MBR = MBR;
+
+  }
+
+  public MBRNode(String label, MultiPolygon polygon) {
     this.label = label;
     this.polygon = polygon;
     createMBR();
   }
-  public void createMBR(){
+
+  public MBRNode(String label) {
+    this.label = "splitNode";
+    MBR = new Envelope(0, 0, 0, 0);
+  }
+
+  public void createMBR() {
     MBR = polygon.getEnvelopeInternal();
+  }
+
+  public void print(int level) {
+    for (int i = 1; i < level; i++) {
+      System.out.print("\t");
+    }
+    System.out.println(this.label);
+    for (MBRNode child : this.subnodes) {
+      child.print(level + 1);
+    }
   }
 }
