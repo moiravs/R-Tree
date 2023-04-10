@@ -15,6 +15,7 @@ import org.locationtech.jts.geom.Point;
  */
 public class AppTest {
     
+
     @Test
     public void shouldAnswerWithTrue() throws IOException {
         String filename = "../tutorial/maps/WB_countries_Admin0_10m.shp";
@@ -23,16 +24,15 @@ public class AppTest {
             throw new RuntimeException("Shapefile does not exist.");
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(-119.0, 56.0);
-        RTree rtree = new RTree();
-        rtree.createTree(filename, "NAME_FR");
+        RTree rtree = new RTree(filename, "NAME_FR");
         MBRNode node = rtree.search(rtree.root, p);
         if (node != null)
-            System.out.println(" node found = " + node.label + "end");
+            System.out.println(" node found = " + node.label);
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label == "Canada");
+        assertTrue(node.label.equals("Canada"));
     }
-
+ 
     @Test
     public void pointDansLaPlaine() throws IOException {
         String filename = "../tutorial/maps/sh_statbel_statistical_sectors_31370_20220101.shp";
@@ -42,14 +42,13 @@ public class AppTest {
         GeometryBuilder gb = new GeometryBuilder();
         // Point p = gb.point(-119.0, 56.0);
         Point p = gb.point(152183, 167679);// Plaine
-        RTree rtree = new RTree();
-        rtree.createTree(filename, "T_SEC_FR");
+        RTree rtree = new RTree(filename, "T_SEC_FR");
         MBRNode node = rtree.search(rtree.root, p);
         if (node != null)
             System.out.println(" node found =" + node.label + "end");
         else
             System.out.println("Point not in any polygon");
-        // assertTrue(node.label == "CAMPUS UNIVERSITAIRE");
+        assertTrue(node.label.equals("CAMPUS UNIVERSITAIRE"));
     }
 
     @Test
@@ -60,14 +59,29 @@ public class AppTest {
             throw new RuntimeException("Shapefile does not exist.");
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(215113.0, 217404.0);// Plaine
-        RTree rtree = new RTree();
-        rtree.createTree(filename, "T_SEC_FR");
+        RTree rtree = new RTree(filename, "T_SEC_FR");
         MBRNode node = rtree.search(rtree.root, p);
         if (node != null)
             System.out.println(" node found = " + node.label);
         else
             System.out.println("Point not in any polygon");
-        // assertTrue(node == null);
+        assertTrue(node == null);
     }
 
+    @Test
+    public void pointInKazakhstan() throws IOException {
+        String filename = "../tutorial/maps/sh_statbel_statistical_sectors_31370_20220101.shp";
+        File file = new File(filename);
+        if (!file.exists())
+            throw new RuntimeException("Shapefile does not exist.");
+        GeometryBuilder gb = new GeometryBuilder();
+        Point p = gb.point(73.0, 43.0);// Plaine
+        RTree rtree = new RTree(filename, "T_SEC_FR");
+        MBRNode node = rtree.search(rtree.root, p);
+        if (node != null)
+            System.out.println(" node found = " + node.label);
+        else
+            System.out.println("Point not in any polygon");
+        assertTrue(node.label.equals("Kazakhstan"));
+    }
 }

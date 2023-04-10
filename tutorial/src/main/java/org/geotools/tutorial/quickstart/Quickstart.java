@@ -85,8 +85,7 @@ public class Quickstart {
         Point p = gb.point(r.nextInt((int) global_bounds.getMinX(), (int) global_bounds.getMaxX()),
                 r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
         System.out.println("point X: " + p.getX() + "point Y:" + p.getY());
-        RTree rtree = new RTree();
-        rtree.createTree(filename, "T_SEC_FR");
+        RTree rtree = new RTree(filename, "T_SEC_FR");
         MBRNode node = rtree.search(rtree.root, p);
         if (node != null)
             System.out.println(" node found = " + node.label);

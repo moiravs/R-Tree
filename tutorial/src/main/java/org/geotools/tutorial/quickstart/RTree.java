@@ -7,6 +7,9 @@
 package org.geotools.tutorial.quickstart;
 
 import org.opengis.feature.simple.SimpleFeature;
+
+import jj2000.j2k.util.ArrayUtil;
+
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureCollection;
@@ -26,9 +29,11 @@ public class RTree {
     private static double smallestEnlargementArea = Double.POSITIVE_INFINITY;
     public MBRNode root = new MBRNode("root");
     MBRNode searchNode;
+    public String algorithm;
 
-    public MBRNode createTree(String filename, String valueProperty) throws IOException {
+    public RTree(String filename, String valueProperty) throws IOException {
         int i = 0;
+        algorithm = "Linear";
         File file = new File(filename);
         if (!file.exists())
             throw new RuntimeException("Shapefile does not exist.");
@@ -50,19 +55,16 @@ public class RTree {
                         addLeaf(root, nodeToAdd);
                         // System.out.println("Start for: " + nodeToAdd.label);
 
-                        root.print(1);
+                        // root.print(1);
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.exit(0);
                     }
-                    System.out.println("End of: " + nodeToAdd.label);
-
+                    // System.out.println("End of: " + nodeToAdd.label);
                     // i++;
                 }
             }
         }
-
-        return null;
     }
 
     MBRNode addLeaf(MBRNode n, MBRNode nodeToAdd) throws Exception {
@@ -76,8 +78,7 @@ public class RTree {
             addLeaf(n, nodeToAdd);
         }
         if (n.subnodes.size() >= N) {
-            System.out.println("ihahahahan" + n.subnodes.get(0).label);
-            splitLineaire(n);
+            split(n);
         }
         return null;
     }
@@ -160,15 +161,23 @@ public class RTree {
      * @return
      * @throws Exception
      */
-    MBRNode splitLineaire(MBRNode node) throws Exception {
+    MBRNode split(MBRNode node) throws Exception {
         ArrayList<MBRNode> copiedSubnodes = new ArrayList<MBRNode>(node.subnodes);
-        ArrayList<MBRNode> splitSeeds = pickSeedsLinear(node);
-        node.subnodes = new ArrayList<MBRNode>();
-        splitSeeds.get(0).parent = node;
-        splitSeeds.get(1).parent = node;
-        node.subnodes.add(splitSeeds.get(0));
-        node.subnodes.add(splitSeeds.get(1));
-        pickNext(splitSeeds.get(0), splitSeeds.get(1), copiedSubnodes);
+        ArrayList<MBRNode> splitSeeds;
+        if (algorithm.equals("Linear")) {
+            splitSeeds = pickSeedsLinear(node);
+        }
+        else {
+            splitSeeds = pickSeedsQuadratic(node);
+        }
+        if (splitSeeds != null) {
+            node.subnodes = new ArrayList<MBRNode>();
+            splitSeeds.get(0).parent = node;
+            splitSeeds.get(1).parent = node;
+            node.subnodes.add(splitSeeds.get(0));
+            node.subnodes.add(splitSeeds.get(1));
+            pickNext(splitSeeds.get(0), splitSeeds.get(1), copiedSubnodes);
+        }
         return node;
     }
 
@@ -199,11 +208,6 @@ public class RTree {
         // getMaxX doit être le + petit possible pr rect1
         // getMinX doit être le + grand possible pr rect2
         for (MBRNode seed : node.subnodes) {
-            System.out.println(seed.label);
-            System.out.println(seed.MBR.getMinX());
-            System.out.println(seed.MBR.getMaxX());
-            System.out.println(seed.MBR.getMinY());
-            System.out.println(seed.MBR.getMaxY());
             if (seed.MBR.getMaxX() < bestMaxX) {
                 bestMaxX = seed.MBR.getMaxX();
                 MBRBestMaxX = seed.MBR;
@@ -224,37 +228,34 @@ public class RTree {
         }
 
         // normalize
-        double widthInner = MBRBestMinX.getMaxX() - MBRBestMaxX.getMinX();
-        double widthOuter = MBRBestMinX.getMinX() - MBRBestMaxX.getMaxX();
-        double separationWidth = widthInner / widthOuter;
-
-        double heightInner = MBRBestMinY.getMaxY() - MBRBestMaxY.getMinY();
-        double heightOuter = MBRBestMinY.getMinY() - MBRBestMaxY.getMaxY();
-        double separationHeight = heightInner / heightOuter;
         ArrayList<MBRNode> foundSeeds = new ArrayList<MBRNode>();
-
         if (MBRBestMinY == MBRBestMaxY && MBRBestMaxX == MBRBestMinX) {
-            throw new Exception("All 4 split Nodes are the same");
+            return null;
         } else if (MBRBestMinY == MBRBestMaxY) {
-            System.out.println("1 hihi");
             foundSeeds.add(new MBRNode(MBRBestMinX));
             foundSeeds.add(new MBRNode(MBRBestMaxX));
-        } else if (MBRBestMinX == MBRBestMaxX && MBRBestMaxY != MBRBestMinY) {
-            System.out.println("4 hihi");
+        } else if (MBRBestMinX == MBRBestMaxX) {
 
             foundSeeds.add(new MBRNode(MBRBestMinY));
             foundSeeds.add(new MBRNode(MBRBestMaxY));
-        } else if (separationWidth > separationHeight) {
-            System.out.println("2 hihi");
+        } else {
+            double widthInner = MBRBestMinX.getMaxX() - MBRBestMaxX.getMinX();
+            double widthOuter = MBRBestMinX.getMinX() - MBRBestMaxX.getMaxX();
+            double separationWidth = widthInner / widthOuter;
 
-            foundSeeds.add(new MBRNode(MBRBestMinX));
-            foundSeeds.add(new MBRNode(MBRBestMaxX));
+            double heightInner = MBRBestMinY.getMaxY() - MBRBestMaxY.getMinY();
+            double heightOuter = MBRBestMinY.getMinY() - MBRBestMaxY.getMaxY();
+            double separationHeight = heightInner / heightOuter;
+            if (separationWidth > separationHeight) {
 
-        } else if (separationWidth <= separationHeight) {
-            System.out.println("3 hihi");
+                foundSeeds.add(new MBRNode(MBRBestMinX));
+                foundSeeds.add(new MBRNode(MBRBestMaxX));
 
-            foundSeeds.add(new MBRNode(MBRBestMinY));
-            foundSeeds.add(new MBRNode(MBRBestMaxY));
+            } else {
+
+                foundSeeds.add(new MBRNode(MBRBestMinY));
+                foundSeeds.add(new MBRNode(MBRBestMaxY));
+            }
         }
 
         return foundSeeds;
