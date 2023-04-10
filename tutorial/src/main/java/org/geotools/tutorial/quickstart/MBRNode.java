@@ -18,10 +18,6 @@ public class MBRNode {
   MultiPolygon polygon;
   MBRNode parent;
 
-  public MBRNode() {
-    this.label = "root";
-    MBR = new Envelope(0, 0, 0, 0);
-  }
 
   public MBRNode(MBRNode node) {
     this.label = node.label;
@@ -32,7 +28,7 @@ public class MBRNode {
 
   public MBRNode(Envelope MBR) {
     this.MBR = MBR;
-
+    this.label = "SplitSeed";
   }
 
   public MBRNode(String label, MultiPolygon polygon) {
@@ -42,7 +38,8 @@ public class MBRNode {
   }
 
   public MBRNode(String label) {
-    this.label = "splitNode";
+    subnodes = new ArrayList<MBRNode>();
+    this.label = label;
     MBR = new Envelope(0, 0, 0, 0);
   }
 
@@ -50,11 +47,14 @@ public class MBRNode {
     MBR = polygon.getEnvelopeInternal();
   }
 
-  public void print(int level) {
+  public void print(int level) throws Exception {
     for (int i = 1; i < level; i++) {
       System.out.print("\t");
     }
     System.out.println(this.label);
+    if (this.subnodes.isEmpty() && this.label== "SplitSeed"){
+      throw new Exception("AIEAIEOUILLE");
+    }
     for (MBRNode child : this.subnodes) {
       child.print(level + 1);
     }

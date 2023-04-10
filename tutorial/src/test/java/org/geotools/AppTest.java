@@ -14,7 +14,7 @@ import org.locationtech.jts.geom.Point;
  * Unit test for simple App.
  */
 public class AppTest {
-
+    
     @Test
     public void shouldAnswerWithTrue() throws IOException {
         String filename = "../tutorial/maps/WB_countries_Admin0_10m.shp";
@@ -30,7 +30,7 @@ public class AppTest {
             System.out.println(" node found = " + node.label + "end");
         else
             System.out.println("Point not in any polygon");
-        // assertTrue(node.label == "Canada");
+        assertTrue(node.label == "Canada");
     }
 
     @Test
