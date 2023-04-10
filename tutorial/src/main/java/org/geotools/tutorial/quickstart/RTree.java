@@ -299,7 +299,7 @@ public class RTree {
      * @return
      */
     ArrayList<MBRNode> pickSeedsQuadratic(MBRNode node) {
-        ArrayList<MBRNode> seeds = new ArrayList<MBRNode>();
+        /*ArrayList<MBRNode> seeds = new ArrayList<MBRNode>();
         // parcourir tout l'arbre
         MBRNode seed1 = new MBRNode("seed1");
         MBRNode seed2 = new MBRNode("seed2");
@@ -319,7 +319,36 @@ public class RTree {
         // comparer avec le meilleur rectangle
 
         // return les seeds correspondant au plus grand area
+        return seeds;*/
+        double maxArea = 0;
+        int M = node.subnodes.size();
+        MBRNode s, t;
+        s = new MBRNode(node);
+        t = new MBRNode(node);
+        ArrayList<MBRNode> seeds = new ArrayList<MBRNode>();
+        seeds.add(s);
+        seeds.add(t);     
+        for (int i = 1; i < M; i++)
+        {
+            for (int j = i + 1; j < M+1; j++)
+            {
+                Envelope r = new Envelope(node.MBR);
+                expandMBR(node.subnodes.get(i), r);
+                double area = r.getArea() - node.subnodes.get(i).MBR.getArea() - node.subnodes.get(j).MBR.getArea();
+                if (area > maxArea) 
+                {
+                    maxArea = area;
+                    s = node.subnodes.get(i);
+                    t = node.subnodes.get(j);
+                }
+            }
+        }
         return seeds;
+    }
+
+    void distributeQuadratic(MBRNode node, MBRNode node1, MBRNode node2)
+    {
+        
     }
 
 }
