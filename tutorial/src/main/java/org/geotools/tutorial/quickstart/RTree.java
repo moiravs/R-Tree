@@ -11,17 +11,17 @@ import org.locationtech.jts.geom.Point;
 
 import java.util.ArrayList;
 
-interface RTree {
+abstract class RTree {
 
 
-    MBRNode addLeaf(MBRNode n, MBRNode nodeToAdd) throws Exception;
+    abstract MBRNode addLeaf(MBRNode n, MBRNode nodeToAdd) throws Exception;
 
     /**
      * @param node
      * @param polygon
      * @return MBRNode
      */
-    MBRNode chooseNode(MBRNode bestNode, MBRNode nodeToAdd);
+    abstract MBRNode chooseNode(MBRNode bestNode, MBRNode nodeToAdd);
 
     /**
      * 
@@ -29,9 +29,28 @@ interface RTree {
      * @param point
      * @return
      */
-    public MBRNode search(MBRNode node, Point point);
+    public MBRNode search(MBRNode node, Point point) { // appeller cette fonction avec la racine de l'arbre
+        if (node.subnodes.size() == 0) { // si c'est une feuille
+            if (node.MBR.contains(point.getX(), point.getY())) {
+                System.out.println(node.label);
+                if (node.polygon.contains(point)) {
+                    return node;
+                }
+            }
+        } else {
+            if (node.MBR.contains(point.getX(), point.getY())) {
+                for (MBRNode subnode : node.subnodes) {
+                    MBRNode nodeFound = search(subnode, point);
+                    if (nodeFound != null)
+                        return nodeFound;
+                }
 
-    Boolean expandMBR(MBRNode node, Envelope MBR);
+            }
+        }
+        return null;
+    }
+
+    abstract Boolean expandMBR(MBRNode node, Envelope MBR);
 
 
 
@@ -41,7 +60,7 @@ interface RTree {
      * @return
      * @throws Exception
      */
-    MBRNode split(MBRNode node) throws Exception ;
+    abstract MBRNode split(MBRNode node) throws Exception ;
 
     /**
      * trouver l'entrée dont le rectangle a
@@ -57,9 +76,9 @@ interface RTree {
      * @return
      * @throws Exception
      */
-    ArrayList<MBRNode> pickSeeds(MBRNode node) throws Exception;
+    abstract ArrayList<MBRNode> pickSeeds(MBRNode node) throws Exception;
 
-    void pickNext(MBRNode splitSeed1, MBRNode splitSeed2, ArrayList<MBRNode> copiedSubnodes);
+    abstract void pickNext(MBRNode splitSeed1, MBRNode splitSeed2, ArrayList<MBRNode> copiedSubnodes);
 
 
 }

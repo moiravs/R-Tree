@@ -13,7 +13,7 @@ import org.locationtech.jts.geom.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-public class RTreeQuadratic implements RTree {
+public class RTreeQuadratic extends RTree {
     private static final int N = 4;
     private static double smallestEnlargementArea = Double.POSITIVE_INFINITY;
     public MBRNode root = new MBRNode("root");
@@ -249,7 +249,9 @@ public class RTreeQuadratic implements RTree {
         return seeds;
     }
 
-    void distributeQuadratic(MBRNode node, MBRNode node1, MBRNode node2) {
-
+    void distribute(MBRNode node, MBRNode node1, MBRNode node2) {
+        return;
     }
+
+    
 }

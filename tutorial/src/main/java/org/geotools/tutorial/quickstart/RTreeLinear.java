@@ -18,7 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class RTreeLinear implements RTree {
+public class RTreeLinear extends RTree {
     private static final int N = 4;
     private static double smallestEnlargementArea = Double.POSITIVE_INFINITY;
     public MBRNode root = new MBRNode("root");
@@ -101,32 +101,6 @@ public class RTreeLinear implements RTree {
         }
     }
 
-    /**
-     * 
-     * @param node
-     * @param point
-     * @return
-     */
-    public MBRNode search(MBRNode node, Point point) { // appeller cette fonction avec la racine de l'arbre
-        if (node.subnodes.size() == 0) { // si c'est une feuille
-            if (node.MBR.contains(point.getX(), point.getY())) {
-                System.out.println(node.label);
-                if (node.polygon.contains(point)) {
-                    return node;
-                }
-            }
-        } else {
-            if (node.MBR.contains(point.getX(), point.getY())) {
-                for (MBRNode subnode : node.subnodes) {
-                    MBRNode nodeFound = search(subnode, point);
-                    if (nodeFound != null)
-                        return nodeFound;
-                }
-
-            }
-        }
-        return null;
-    }
 
     public Boolean expandMBR(MBRNode node, Envelope MBR) {
         node.MBR.expandToInclude(MBR);
