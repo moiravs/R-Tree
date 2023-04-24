@@ -5,10 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.geotools.geometry.jts.GeometryBuilder;
 import org.geotools.tutorial.quickstart.FileLoader;
 import org.geotools.tutorial.quickstart.MBRNode;
@@ -16,35 +12,40 @@ import org.geotools.tutorial.quickstart.RTreeLinear;
 import org.geotools.tutorial.quickstart.RTreeQuadratic;
 import org.junit.After;
 import org.junit.Before;
-//import org.junit.Test;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runner.OrderWith;
 import org.locationtech.jts.geom.Point;
-
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
 /**
  * Unit test for simple App.
  */
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class) 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AppTest {
     String worldMap = "../tutorial/maps/WB_countries_Admin0_10m.shp";
     String belgiumMap = "../tutorial/maps/sh_statbel_statistical_sectors_31370_20220101.shp";
     long startTime;
+    private static int i = 0;
     long endTime;
 
     @Before
     public void timer(){
+        i+=1;
+        System.out.println("Starting " + i + " test");
         startTime = System.currentTimeMillis();
     }
 
     @After
     public void endTimer() {
         endTime = System.currentTimeMillis();
+        System.out.println("Finishing " + i + " test");
         System.out.println("Total execution time: " + (endTime - startTime));
     }
-    // Algorithme Linéaire
-
-    //Carte de la belgique
+    // 1er test - Carte de la belgique - Algorithme linéaire
     @Test
-    @Order(1)
-    public void pointDansLaPlaineL() throws IOException {
+    public void ApointDansLaPlaineL() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -59,10 +60,9 @@ public class AppTest {
         assertTrue(node.label.equals("CAMPUS UNIVERSITAIRE"));
     }
 
-
+    // 2ème test - Carte de la belgique - Algorithme linéaire
     @Test
-    @Order(2)
-    public void pointJusteEnDehorsL() throws IOException {
+    public void BpointJusteEnDehorsL() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -76,10 +76,9 @@ public class AppTest {
         assertTrue(node == null);
     }
 
-    // Carte du monde
+    // 3ème test - Carte du monde - Algorithme linéaire
     @Test
-    @Order(3)
-    public void pointInKazakhstanL() throws IOException {
+    public void CpointInKazakhstanL() throws IOException {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -93,9 +92,9 @@ public class AppTest {
         assertTrue(node.label.equals("Kazakhstan"));
     }
 
+    // 4ème test - Carte du monde - Algorithme linéaire
     @Test
-    @Order(4)
-    public void shouldAnswerWithTrueL() throws IOException {
+    public void DshouldAnswerWithTrueL() throws IOException {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -109,12 +108,9 @@ public class AppTest {
         assertTrue(node.label.equals("Canada"));
     }
 
-    //Algorithme Quadratique
- 
-    // Carte de la belgique
+    // 5ème test - Carte de la belgique - Algorithme quadratique
     @Test
-    @Order(4)
-    public void pointDansLaPlaineQ() throws IOException {
+    public void EpointDansLaPlaineQ() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -129,9 +125,9 @@ public class AppTest {
         assertTrue(node.label.equals("CAMPUS UNIVERSITAIRE"));
     }
 
+    // 6ème test - Carte de la belgique - Algorithme quadratique
     @Test
-    @Order(5)
-    public void pointJusteEnDehorsQ() throws IOException {
+    public void FpointJusteEnDehorsQ() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -145,10 +141,9 @@ public class AppTest {
         assertTrue(node == null);
     }
 
-    // Carte du monde
+    // 7ème test - Carte du monde - Algorithme quadratique
     @Test
-    @Order(6)
-    public void pointInKazakhstanQ() throws IOException {
+    public void GpointInKazakhstanQ() throws IOException {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -162,9 +157,9 @@ public class AppTest {
         assertTrue(node.label.equals("Kazakhstan"));
     }
 
+    // 8ème test - Carte du monde - Algorithme quadratique
     @Test
-    @Order(7)
-    public void shouldAnswerWithTrueQ() throws IOException {
+    public void HshouldAnswerWithTrueQ() throws IOException {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();

@@ -129,8 +129,6 @@ abstract class RTree {
      * @throws Exception
      */
     public MBRNode split(MBRNode node) throws Exception {
-        System.out.println("before");
-        root.print(1);
         ArrayList<MBRNode> copiedSubnodes = new ArrayList<MBRNode>(node.subnodes);
         ArrayList<MBRNode> splitSeeds;
         splitSeeds = pickSeeds(node);
@@ -140,6 +138,7 @@ abstract class RTree {
             splitSeeds.get(1).parent = node;
             node.subnodes.add(splitSeeds.get(0));
             node.subnodes.add(splitSeeds.get(1));
+
             pickNext(splitSeeds.get(0), splitSeeds.get(1), copiedSubnodes);
         }
         return node;

@@ -20,7 +20,6 @@ public class RTreeQuadratic extends RTree {
      * @throws Exception
      */
     public ArrayList<MBRNode> pickSeeds(MBRNode node) throws Exception {
-        root.print(1);
         double maxArea = 0;
         int M = node.subnodes.size();
         MBRNode seed1 = new MBRNode("test");
@@ -38,11 +37,12 @@ public class RTreeQuadratic extends RTree {
                 double area = copiedEnvelope.getArea() - node.subnodes.get(i).MBR.getArea() - node.subnodes.get(j).MBR.getArea();
                 if (area > maxArea) {
                     maxArea = area;
-                    seed1 = new MBRNode(new MBRNode(node.subnodes.get(j).MBR));
+                    seed1 = new MBRNode(new MBRNode(node.subnodes.get(i).MBR));
                     seed2 = new MBRNode(new MBRNode(node.subnodes.get(j).MBR));
                 }
             }
         }
+
         seeds.add(seed1);
         seeds.add(seed2);
         return seeds;
