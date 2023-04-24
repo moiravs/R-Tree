@@ -1,25 +1,10 @@
-\contentsline {section}{\numberline {1}Introduction}{2}{}%
-\contentsline {section}{\numberline {2}Tâches Accomplies}{2}{}%
-\contentsline {section}{\numberline {3}Classes}{2}{}%
-\contentsline {subsection}{\numberline {3.1}Classes du Modèle}{2}{}%
-\contentsline {subsubsection}{\numberline {3.1.1}BoardModel}{2}{}%
-\contentsline {subsubsection}{\numberline {3.1.2}LogicCell}{2}{}%
-\contentsline {subsubsection}{\numberline {3.1.3}Téléportation}{3}{}%
-\contentsline {subsection}{\numberline {3.2}Classes de la Vue}{3}{}%
-\contentsline {subsubsection}{\numberline {3.2.1}CellDisplay}{3}{}%
-\contentsline {subsubsection}{\numberline {3.2.2}DisplayBoard}{3}{}%
-\contentsline {subsubsection}{\numberline {3.2.3}HelpWindow}{3}{}%
-\contentsline {subsubsection}{\numberline {3.2.4}StartWindow}{3}{}%
-\contentsline {subsection}{\numberline {3.3}Classes du contrôleur}{4}{}%
-\contentsline {subsubsection}{\numberline {3.3.1}MainWindow}{4}{}%
-\contentsline {section}{\numberline {4}Logique du jeu}{4}{}%
-\contentsline {subsection}{\numberline {4.1}Démarrer le jeu}{4}{}%
-\contentsline {subsection}{\numberline {4.2}Jouer}{4}{}%
-\contentsline {subsection}{\numberline {4.3}Widgets}{5}{}%
-\contentsline {subsubsection}{\numberline {4.3.1}Help}{5}{}%
-\contentsline {subsubsection}{\numberline {4.3.2}Levels}{5}{}%
-\contentsline {subsubsection}{\numberline {4.3.3}ResetMinPas}{5}{}%
-\contentsline {subsubsection}{\numberline {4.3.4}ResetLevel}{5}{}%
-\contentsline {subsection}{\numberline {4.4}Quitter le jeu}{5}{}%
-\contentsline {section}{\numberline {5}Modèle-Vue-contrôler}{5}{}%
-\contentsline {section}{\numberline {6}Conclusion}{6}{}%
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {section}{\numberline {2}Structure du code}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}MBRNode}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}RTreeLinear}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}RTreeQuadratic}{2}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}RTree}{2}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}FileLoader}{2}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Conclusion}{2}{section.3}%
+\contentsline {section}{\numberline {4}Bibliographie}{2}{section.4}%
+\contentsline {section}{\numberline {5}Annexes}{2}{section.5}%
