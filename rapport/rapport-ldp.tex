@@ -40,6 +40,24 @@
 
 
 \par
+\section{RTree}
+\subsection{Création RTree}
+
+\subsection{Split Linéaire}
+Au début, nous copions l'entiereté du vecteur des enfants du node choisi pour
+split. Puis nous vidons ce vecteur et nous rajoutons les seeds choisies. Et puis
+seulement avec le vecteur copié nous ajoutions au fur et à mesure au seeds
+choisies. Nous nous sommes dit qu'on perdait bcp de temps à copier l'entiereté
+du vecteur, surtout sur des gros vecteurs.
+
+Nous avons donc changé l'ordre, d'abord nous appelons pickNext pour qu'il
+rajoute les enfants aux seeds, puis nous vidons le vecteur du node à spliter et
+rajoutons les splits seeds.
+
+Grâce à cette amélioration, les 8 tests que nous avons fait tourner ont pris
+5,865 secondes au total au lieu de 6,778 secondes.
+\subsection{Split Quadratique}
+
 
 \section{Structure du code}
 

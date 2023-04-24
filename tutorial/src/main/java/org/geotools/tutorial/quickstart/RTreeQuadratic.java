@@ -29,10 +29,7 @@ public class RTreeQuadratic extends RTree {
 
         for (int i = 0; i < M; i++) {
             for (int j = i + 1; j < M; j++) { // expliquer dans le rapport pq on prend j +1
-                // prendre les deux seeds qui font la + grande enveloppe
                 copiedEnvelope = new Envelope(node.subnodes.get(i).MBR);
-                //copiedEnvelope = new Envelope(node.MBR);
-                //expandMBR(node.subnodes.get(i), r);
                 copiedEnvelope.expandToInclude(node.subnodes.get(j).MBR);
                 double area = copiedEnvelope.getArea() - node.subnodes.get(i).MBR.getArea() - node.subnodes.get(j).MBR.getArea();
                 if (area > maxArea) {

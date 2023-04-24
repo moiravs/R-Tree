@@ -14,6 +14,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.OrderWith;
 import org.locationtech.jts.geom.Point;
 import org.junit.FixMethodOrder;
@@ -26,23 +28,28 @@ import org.junit.runners.MethodSorters;
 public class AppTest {
     String worldMap = "../tutorial/maps/WB_countries_Admin0_10m.shp";
     String belgiumMap = "../tutorial/maps/sh_statbel_statistical_sectors_31370_20220101.shp";
-    long startTime;
+    long startTimeLocal;
     private static int i = 0;
-    long endTime;
+    long endTimeLocal;
+    long startTimeGlobal;
+    long endTimeGlobal;
+
+
 
     @Before
     public void timer(){
         i+=1;
         System.out.println("Starting " + i + " test");
-        startTime = System.currentTimeMillis();
+        startTimeLocal = System.currentTimeMillis();
     }
 
     @After
     public void endTimer() {
-        endTime = System.currentTimeMillis();
+        endTimeLocal = System.currentTimeMillis();
         System.out.println("Finishing " + i + " test");
-        System.out.println("Total execution time: " + (endTime - startTime));
+        System.out.println("Total execution time: " + (endTimeLocal - startTimeLocal));
     }
+
     // 1er test - Carte de la belgique - Algorithme linéaire
     @Test
     public void ApointDansLaPlaineL() throws IOException {

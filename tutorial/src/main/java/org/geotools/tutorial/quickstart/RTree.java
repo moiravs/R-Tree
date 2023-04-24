@@ -129,17 +129,17 @@ abstract class RTree {
      * @throws Exception
      */
     public MBRNode split(MBRNode node) throws Exception {
-        ArrayList<MBRNode> copiedSubnodes = new ArrayList<MBRNode>(node.subnodes);
+        //ArrayList<MBRNode> copiedSubnodes = new ArrayList<MBRNode>(node.subnodes);
         ArrayList<MBRNode> splitSeeds;
         splitSeeds = pickSeeds(node);
         if (splitSeeds != null) {
+            pickNext(splitSeeds.get(0), splitSeeds.get(1), node.subnodes);
             node.subnodes = new ArrayList<MBRNode>();
             splitSeeds.get(0).parent = node;
             splitSeeds.get(1).parent = node;
             node.subnodes.add(splitSeeds.get(0));
             node.subnodes.add(splitSeeds.get(1));
 
-            pickNext(splitSeeds.get(0), splitSeeds.get(1), copiedSubnodes);
         }
         return node;
     }
@@ -149,7 +149,6 @@ abstract class RTree {
             n.subnodes.add(nodeToAdd); // create leaf
             nodeToAdd.parent = n;
             expandMBR(n, nodeToAdd.MBR);
-            // n.MBR.expandToInclude(nodeToAdd.MBR);
         } else { // still need to go deeper
             n = chooseNode(root, nodeToAdd);
             addLeaf(n, nodeToAdd);
