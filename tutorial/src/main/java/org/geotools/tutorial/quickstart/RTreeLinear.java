@@ -1,91 +1,18 @@
 package org.geotools.tutorial.quickstart;
 
+
 import org.locationtech.jts.geom.Envelope;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class RTreeLinear extends RTree {
-    private static final int N = 4;
-    private static double smallestEnlargementArea = Double.POSITIVE_INFINITY;
-    MBRNode searchNode;
 
     public RTreeLinear(File file, String valueProperty) throws IOException {
         super(file, valueProperty);
     }
 
-    public MBRNode addLeaf(MBRNode n, MBRNode nodeToAdd) throws Exception {
-        if (n.subnodes.size() == 0 || n.subnodes.get(0).subnodes.size() == 0) { // if bottom level is reached -> create
-            n.subnodes.add(nodeToAdd); // create leaf
-            nodeToAdd.parent = n;
-            expandMBR(n, nodeToAdd.MBR);
-            // n.MBR.expandToInclude(nodeToAdd.MBR);
-        } else { // still need to go deeper
-            n = chooseNode(root, nodeToAdd);
-            addLeaf(n, nodeToAdd);
-        }
-        if (n.subnodes.size() >= N) {
-            split(n);
-        }
-        return null;
-    }
 
-    /**
-     * @param node
-     * @param polygon
-     * @return MBRNode
-     */
-    public MBRNode chooseNode(MBRNode bestNode, MBRNode nodeToAdd) {
-        if (bestNode.subnodes.isEmpty() || bestNode.subnodes.get(0).subnodes.isEmpty()) {
-            return bestNode;
-        } else {
-            MBRNode bestChildNode = new MBRNode("SplitNode");
-            for (MBRNode subnode : bestNode.subnodes) {
-                Envelope copiedEnvelope = new Envelope(subnode.MBR);
-                copiedEnvelope.expandToInclude(nodeToAdd.MBR);
-                double enlargementArea = (copiedEnvelope.getArea() - nodeToAdd.MBR.getArea());
-                if (enlargementArea < smallestEnlargementArea) {
-                    smallestEnlargementArea = enlargementArea;
-                    bestChildNode = subnode;
-                }
-            }
-            if (bestChildNode.label == "SplitNode") {
-                throw new RuntimeException();
-            }
-            smallestEnlargementArea = Double.POSITIVE_INFINITY;
-            return chooseNode(bestChildNode, nodeToAdd);
-        }
-    }
-
-
-    public Boolean expandMBR(MBRNode node, Envelope MBR) {
-        node.MBR.expandToInclude(MBR);
-        while (node.label != "root") {
-            return expandMBR(node.parent, MBR);
-        }
-        return true;
-    }
-
-    /**
-     * 
-     * @param node
-     * @return
-     * @throws Exception
-     */
-    public MBRNode split(MBRNode node) throws Exception {
-        ArrayList<MBRNode> copiedSubnodes = new ArrayList<MBRNode>(node.subnodes);
-        ArrayList<MBRNode> splitSeeds;
-        splitSeeds = pickSeeds(node);
-        if (splitSeeds != null) {
-            node.subnodes = new ArrayList<MBRNode>();
-            splitSeeds.get(0).parent = node;
-            splitSeeds.get(1).parent = node;
-            node.subnodes.add(splitSeeds.get(0));
-            node.subnodes.add(splitSeeds.get(1));
-            pickNext(splitSeeds.get(0), splitSeeds.get(1), copiedSubnodes);
-        }
-        return node;
-    }
 
     /**
      * trouver l'entrée dont le rectangle a

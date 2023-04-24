@@ -49,6 +49,7 @@ public class MBRNode {
 
   public void print(int level) throws Exception {
     for (int i = 1; i < level; i++) {
+      System.out.println(this.label);
       System.out.print("\t");
     }
     if (this.subnodes.isEmpty() && this.label== "SplitSeed"){

@@ -45,13 +45,14 @@
 
 \par
 \subsection{MBRNode}
-MBRNode représente les noeuds des R-Tree. des polygones
+MBRNode représente les noeuds des R-Tree. Elle contient un label, un polygone,
+des enfants (sauf si c'est une feuille) et un parent (sauf si c'est la racine de
+l'arbre)
 
 \subsection{RTreeLinear}
 \label{RTreeLinear}
 
 RTreeLinear représente l'implémentation du R-Tree avec l'algorithme de split linéaire.
-
 \subsection{RTreeQuadratic}
 \label{RTreeQuadratic}
 
