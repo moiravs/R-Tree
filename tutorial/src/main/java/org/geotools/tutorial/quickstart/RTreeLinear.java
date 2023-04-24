@@ -1,6 +1,5 @@
 package org.geotools.tutorial.quickstart;
 
-
 import org.locationtech.jts.geom.Envelope;
 import java.io.File;
 import java.io.IOException;
@@ -8,11 +7,9 @@ import java.util.ArrayList;
 
 public class RTreeLinear extends RTree {
 
-    public RTreeLinear(File file, String valueProperty) throws IOException {
-        super(file, valueProperty);
+    public RTreeLinear(File file, String valueProperty, int N) throws IOException {
+        super(file, valueProperty, N);
     }
-
-
 
     /**
      * trouver l'entrée dont le rectangle a

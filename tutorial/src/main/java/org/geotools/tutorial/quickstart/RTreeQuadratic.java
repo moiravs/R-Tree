@@ -4,11 +4,12 @@ import org.locationtech.jts.geom.Envelope;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class RTreeQuadratic extends RTree {
 
-    public RTreeQuadratic(File file, String valueProperty) throws IOException {
-        super(file, valueProperty);
+    public RTreeQuadratic(File file, String valueProperty, int N) throws IOException {
+        super(file, valueProperty, N);
     }
 
     /**
@@ -31,7 +32,8 @@ public class RTreeQuadratic extends RTree {
             for (int j = i + 1; j < M; j++) { // expliquer dans le rapport pq on prend j +1
                 copiedEnvelope = new Envelope(node.subnodes.get(i).MBR);
                 copiedEnvelope.expandToInclude(node.subnodes.get(j).MBR);
-                double area = copiedEnvelope.getArea() - node.subnodes.get(i).MBR.getArea() - node.subnodes.get(j).MBR.getArea();
+                double area = copiedEnvelope.getArea() - node.subnodes.get(i).MBR.getArea()
+                        - node.subnodes.get(j).MBR.getArea();
                 if (area > maxArea) {
                     maxArea = area;
                     seed1 = new MBRNode(new MBRNode(node.subnodes.get(i).MBR));

@@ -12,8 +12,9 @@ import org.locationtech.jts.geom.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.opengis.feature.simple.SimpleFeature;
+import java.util.List;
 
+import org.opengis.feature.simple.SimpleFeature;
 
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
@@ -22,14 +23,13 @@ import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.locationtech.jts.geom.MultiPolygon;
 
-
 abstract class RTree {
     public MBRNode root = new MBRNode("root");
-    private static final int N = 4;
+    private static int N;
     private static double smallestEnlargementArea = Double.POSITIVE_INFINITY;
 
-    RTree(File file, String valueProperty) throws IOException{
-        int i = 0;
+    RTree(File file, String valueProperty, int _N) throws IOException {
+        N = _N;
         FileDataStore store = FileDataStoreFinder.getDataStore(file);
         SimpleFeatureSource featureSource = store.getFeatureSource();
         SimpleFeatureCollection all_features = featureSource.getFeatures();
@@ -38,9 +38,8 @@ abstract class RTree {
         try (SimpleFeatureIterator iterator = all_features.features()) {
             while (iterator.hasNext()) {
                 SimpleFeature feature = iterator.next();
-
                 MultiPolygon polygon = (MultiPolygon) feature.getDefaultGeometry();
-                if (polygon != null && root != null && i != 50) {
+                if (polygon != null && root != null) {
                     String label = feature.getProperty(valueProperty).getValue().toString();
                     MBRNode nodeToAdd = new MBRNode(label, polygon);
                     try {
@@ -80,7 +79,6 @@ abstract class RTree {
         return null;
     }
 
-
     public void pickNext(MBRNode splitSeed1, MBRNode splitSeed2, ArrayList<MBRNode> copiedSubnodes) {
         for (MBRNode subnode : copiedSubnodes) {
             if (subnode.MBR == splitSeed1.MBR) {
@@ -112,7 +110,6 @@ abstract class RTree {
 
     }
 
-
     public Boolean expandMBR(MBRNode node, Envelope MBR) {
         node.MBR.expandToInclude(MBR);
         while (node.label != "root") {
@@ -121,7 +118,6 @@ abstract class RTree {
         return true;
     }
 
-    
     /**
      * 
      * @param node
@@ -129,9 +125,7 @@ abstract class RTree {
      * @throws Exception
      */
     public MBRNode split(MBRNode node) throws Exception {
-        //ArrayList<MBRNode> copiedSubnodes = new ArrayList<MBRNode>(node.subnodes);
-        ArrayList<MBRNode> splitSeeds;
-        splitSeeds = pickSeeds(node);
+        ArrayList<MBRNode> splitSeeds = pickSeeds(node);
         if (splitSeeds != null) {
             pickNext(splitSeeds.get(0), splitSeeds.get(1), node.subnodes);
             node.subnodes = new ArrayList<MBRNode>();
@@ -139,7 +133,6 @@ abstract class RTree {
             splitSeeds.get(1).parent = node;
             node.subnodes.add(splitSeeds.get(0));
             node.subnodes.add(splitSeeds.get(1));
-
         }
         return node;
     }
@@ -185,6 +178,7 @@ abstract class RTree {
             return chooseNode(bestChildNode, nodeToAdd);
         }
     }
+
     /**
      * trouver l'entrée dont le rectangle a
      * le côté bas le plus élevé, et celui

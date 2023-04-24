@@ -18,7 +18,6 @@ public class MBRNode {
   MultiPolygon polygon;
   MBRNode parent;
 
-
   public MBRNode(MBRNode node) {
     this.label = node.label;
     this.MBR = node.MBR;
@@ -48,11 +47,12 @@ public class MBRNode {
   }
 
   public void print(int level) throws Exception {
-    System.out.println(this.label);
     for (int i = 1; i < level; i++) {
       System.out.print("\t");
     }
-    if (this.subnodes.isEmpty() && this.label== "SplitSeed"){
+    System.out.println(this.label + " " + this.MBR.getArea());
+
+    if (this.subnodes.isEmpty() && this.label == "SplitSeed") {
       throw new Exception("AIEAIEOUILLE");
     }
     for (MBRNode child : this.subnodes) {

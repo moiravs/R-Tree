@@ -15,6 +15,8 @@
 \usepackage{hyperref}
 \usepackage{fullpage}
 \usepackage{lipsum}
+\documentclass{article}
+\usepackage{multirow}
 
 \nocite{*}
 \setlength\parindent{24pt}
@@ -42,6 +44,10 @@
 \par
 \section{RTree}
 \subsection{Création RTree}
+Au début, nous avions N, le truc maximum pr les RTree en attribut de la classe RTree et défini là dedans.
+Pour optimiser notre programme, nous avons décidé de le passer en paramètre.
+Grâce à cette amélioration, les 8 tests que nous avons fait tourner ont pris
+4,429 secondes au total au lieu de 5,865 secondes.
 
 \subsection{Split Linéaire}
 Au début, nous copions l'entiereté du vecteur des enfants du node choisi pour
@@ -67,17 +73,15 @@ MBRNode représente les noeuds des R-Tree. Elle contient un label, un polygone,
 des enfants (sauf si c'est une feuille) et un parent (sauf si c'est la racine de
 l'arbre)
 
-\subsection{RTreeLinear}
-\label{RTreeLinear}
+\subsection{RTreeLinear}\label{RTreeLinear}
 
 RTreeLinear représente l'implémentation du R-Tree avec l'algorithme de split linéaire.
-\subsection{RTreeQuadratic}
-\label{RTreeQuadratic}
+\subsection{RTreeQuadratic}\label{RTreeQ}
 
 \subsection{RTree}
 
 RTree est une classe abstraite. Elle permet de regrouper ensemble les méthodes
-communes à \nameref{RTreeLinear} et \nameref{RTreeQuadratic}, par exemple la
+communes à RTreeLinear et RTreeQuadratic, par exemple la
 recherche d'un noeud (searchNode), l'initialisation de la classe
 
 
@@ -86,6 +90,33 @@ recherche d'un noeud (searchNode), l'initialisation de la classe
 Cette classe permet de charger le fichier en mémoire. Nous avons implémenté
 cette classe afin de facilement changer la façon dont les fichiers sont chargés
 en mémoire.
+
+\section{Expérience sur données réelles}
+\subsection{Présentation des tests}
+
+\subsection{Résultats des tests}
+Temps en millisecondes de la fonction search en fonction des différents tests et valeurs.
+
+\begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|  }
+ \hline
+ \multicolumn{4}{|c|}{Country List} \\
+ \hline
+ Test & N=4 & N = 500 & N = 10000\\
+ \hline
+ Test1   & 15    & 15&   17\\
+ Test2 &   1  & 1   & 1\\
+ Test3 & 76 & 8&  11\\
+ Test4    & 123 & 214&  219\\
+ Test5 &   2  & 0& 2\\
+ Test6 & 1  & 1   & 4\\
+ Test7& 3  & 2& 2\\
+ Test8& 29 & 76 & 73\\
+ \hline
+\end{tabular}
+
+\subsection{Conclusion des tests}
+Nous avons donc remarqué suite à cela que le test 4 prenait beaucoup de temps,
+et plus généralement les tests concernant la carte du monde (Test 3, 4, 7, 8).
 
 \section{Conclusion}
 \indent

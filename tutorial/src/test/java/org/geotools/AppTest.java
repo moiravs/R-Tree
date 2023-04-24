@@ -31,8 +31,7 @@ public class AppTest {
     long startTimeLocal;
     private static int i = 0;
     long endTimeLocal;
-    long startTimeGlobal;
-    long endTimeGlobal;
+    private static final int N = 4;
 
 
 
@@ -58,8 +57,11 @@ public class AppTest {
         GeometryBuilder gb = new GeometryBuilder();
         // Point p = gb.point(-119.0, 56.0);
         Point p = gb.point(152183, 167679);// Plaine
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "T_SEC_FR");
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "T_SEC_FR", N);
+        long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
+        long endTimeGlobal = System.currentTimeMillis();
+        System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
         if (node != null)
             System.out.println(" node found =" + node.label + "end");
         else
@@ -74,8 +76,11 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(215113.0, 217404.0);// Plaine
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "T_SEC_FR");
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "T_SEC_FR", N);
+        long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
+        long endTimeGlobal = System.currentTimeMillis();
+        System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
         if (node != null)
             System.out.println(" node found = " + node.label);
         else
@@ -90,8 +95,11 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(73.0, 43.0);// Plaine
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "NAME_FR");
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "NAME_FR", N);
+        long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
+        long endTimeGlobal = System.currentTimeMillis();
+        System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
         if (node != null)
             System.out.println(" node found = " + node.label);
         else
@@ -101,13 +109,17 @@ public class AppTest {
 
     // 4ème test - Carte du monde - Algorithme linéaire
     @Test
-    public void DshouldAnswerWithTrueL() throws IOException {
+    public void DshouldAnswerWithTrueL() throws Exception {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(-119.0, 56.0);
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "NAME_FR");
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "NAME_FR", N);
+        long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
+        long endTimeGlobal = System.currentTimeMillis();
+        rtree.root.print(1);
+        System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
         if (node != null)
             System.out.println(" node found = " + node.label);
         else
@@ -123,8 +135,11 @@ public class AppTest {
         GeometryBuilder gb = new GeometryBuilder();
         // Point p = gb.point(-119.0, 56.0);
         Point p = gb.point(152183, 167679);// Plaine
-        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "T_SEC_FR");
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "T_SEC_FR", N);
+        long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
+        long endTimeGlobal = System.currentTimeMillis();
+        System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
         if (node != null)
             System.out.println(" node found =" + node.label + "end");
         else
@@ -139,8 +154,11 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(215113.0, 217404.0);// Plaine
-        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "T_SEC_FR");
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "T_SEC_FR", N);
+        long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
+        long endTimeGlobal = System.currentTimeMillis();
+        System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
         if (node != null)
             System.out.println(" node found = " + node.label);
         else
@@ -155,8 +173,11 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(73.0, 43.0);// Plaine
-        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "NAME_FR");
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "NAME_FR", N);
+        long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
+        long endTimeGlobal = System.currentTimeMillis();
+        System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
         if (node != null)
             System.out.println(" node found = " + node.label);
         else
@@ -171,8 +192,11 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(-119.0, 56.0);
-        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "NAME_FR");
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "NAME_FR", N);
+        long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
+        long endTimeGlobal = System.currentTimeMillis();
+        System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
         if (node != null)
             System.out.println(" node found = " + node.label);
         else

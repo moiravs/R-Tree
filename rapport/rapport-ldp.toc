@@ -8,7 +8,11 @@
 \contentsline {subsection}{\numberline {3.2}RTreeLinear}{2}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}RTreeQuadratic}{2}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}RTree}{2}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}FileLoader}{2}{subsection.3.5}%
-\contentsline {section}{\numberline {4}Conclusion}{3}{section.4}%
-\contentsline {section}{\numberline {5}Bibliographie}{3}{section.5}%
-\contentsline {section}{\numberline {6}Annexes}{3}{section.6}%
+\contentsline {subsection}{\numberline {3.5}FileLoader}{3}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Expérience sur données réelles}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Présentation des tests}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Résultats des tests}{3}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Conclusion des tests}{3}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Conclusion}{3}{section.5}%
+\contentsline {section}{\numberline {6}Bibliographie}{3}{section.6}%
+\contentsline {section}{\numberline {7}Annexes}{3}{section.7}%

@@ -5,6 +5,7 @@
  */
 
 package org.geotools.tutorial.quickstart;
+
 import java.awt.Color;
 import java.io.File;
 
@@ -55,8 +56,7 @@ public class Quickstart {
      */
     public static void main(String[] args) throws Exception {
         // display a data store file chooser dialog for shapefiles
-
-        String filename = "../tutorial/maps/sh_statbel_statistical_sectors_31370_20220101.shp";
+        String filename = "../tutorial/maps/WB_countries_Admin0_10m.shp";
 
         FileLoader loader = new FileLoader(filename);
 
@@ -83,7 +83,7 @@ public class Quickstart {
         Point p = gb.point(r.nextInt((int) global_bounds.getMinX(), (int) global_bounds.getMaxX()),
                 r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
         System.out.println("point X: " + p.getX() + "point Y:" + p.getY());
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "T_SEC_FR");
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "NAME_FR", 4);
         MBRNode node = rtree.search(rtree.root, p);
         if (node != null)
             System.out.println(" node found = " + node.label);
@@ -113,7 +113,7 @@ public class Quickstart {
         else {
             for (Property prop : target.getProperties()) {
                 if (prop.getName().toString() != "the_geom") {
-                    //System.out.println(prop.getName() + ": " + prop.getValue());
+                    // System.out.println(prop.getName() + ": " + prop.getValue());
                 }
             }
         }
