@@ -5,6 +5,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.geotools.geometry.jts.GeometryBuilder;
 import org.geotools.tutorial.quickstart.FileLoader;
 import org.geotools.tutorial.quickstart.MBRNode;
@@ -12,12 +16,13 @@ import org.geotools.tutorial.quickstart.RTreeLinear;
 import org.geotools.tutorial.quickstart.RTreeQuadratic;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
+//import org.junit.Test;
 import org.locationtech.jts.geom.Point;
 
 /**
  * Unit test for simple App.
  */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class) 
 public class AppTest {
     String worldMap = "../tutorial/maps/WB_countries_Admin0_10m.shp";
     String belgiumMap = "../tutorial/maps/sh_statbel_statistical_sectors_31370_20220101.shp";
@@ -38,6 +43,7 @@ public class AppTest {
 
     //Carte de la belgique
     @Test
+    @Order(1)
     public void pointDansLaPlaineL() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
@@ -55,6 +61,7 @@ public class AppTest {
 
 
     @Test
+    @Order(2)
     public void pointJusteEnDehorsL() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
@@ -71,6 +78,7 @@ public class AppTest {
 
     // Carte du monde
     @Test
+    @Order(3)
     public void pointInKazakhstanL() throws IOException {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
@@ -86,6 +94,7 @@ public class AppTest {
     }
 
     @Test
+    @Order(4)
     public void shouldAnswerWithTrueL() throws IOException {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
@@ -103,7 +112,8 @@ public class AppTest {
     //Algorithme Quadratique
  
     // Carte de la belgique
-    /*@Test
+    @Test
+    @Order(4)
     public void pointDansLaPlaineQ() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
@@ -120,6 +130,7 @@ public class AppTest {
     }
 
     @Test
+    @Order(5)
     public void pointJusteEnDehorsQ() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
@@ -136,6 +147,7 @@ public class AppTest {
 
     // Carte du monde
     @Test
+    @Order(6)
     public void pointInKazakhstanQ() throws IOException {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
@@ -151,6 +163,7 @@ public class AppTest {
     }
 
     @Test
+    @Order(7)
     public void shouldAnswerWithTrueQ() throws IOException {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
@@ -163,5 +176,5 @@ public class AppTest {
         else
             System.out.println("Point not in any polygon");
         assertTrue(node.label.equals("Canada"));
-    }*/
+    }
 }
