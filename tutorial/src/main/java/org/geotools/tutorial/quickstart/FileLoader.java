@@ -1,21 +1,23 @@
-package org;
+package org.geotools.tutorial.quickstart;
 import java.io.File;
 
 public class FileLoader {
     String filename;
     File file;
 
-    FileLoader(String filename)
+    public FileLoader(String filename)
     {
         this.filename = filename;
     }
 
-    public loadFile()
+    public File loadFile()
     {
         file = new File(filename);
         if (!file.exists())
         {
-            
+            throw new RuntimeException("Shapefile does not exist.");
         }
+        
+        return file;
     }
 }

@@ -5,7 +5,6 @@
  */
 
 package org.geotools.tutorial.quickstart;
-
 import java.awt.Color;
 import java.io.File;
 
@@ -59,11 +58,9 @@ public class Quickstart {
 
         String filename = "../tutorial/maps/sh_statbel_statistical_sectors_31370_20220101.shp";
 
-        File file = new File(filename);
-        if (!file.exists())
-            throw new RuntimeException("Shapefile does not exist.");
+        FileLoader loader = new FileLoader(filename);
 
-        FileDataStore store = FileDataStoreFinder.getDataStore(file);
+        FileDataStore store = FileDataStoreFinder.getDataStore(loader.loadFile());
         SimpleFeatureSource featureSource = store.getFeatureSource();
         SimpleFeatureCollection all_features = featureSource.getFeatures();
 
@@ -86,7 +83,7 @@ public class Quickstart {
         Point p = gb.point(r.nextInt((int) global_bounds.getMinX(), (int) global_bounds.getMaxX()),
                 r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
         System.out.println("point X: " + p.getX() + "point Y:" + p.getY());
-        RTreeLinear rtree = new RTreeLinear(filename, "T_SEC_FR");
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "T_SEC_FR");
         MBRNode node = rtree.search(rtree.root, p);
         if (node != null)
             System.out.println(" node found = " + node.label);

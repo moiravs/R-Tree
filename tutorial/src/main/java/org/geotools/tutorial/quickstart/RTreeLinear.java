@@ -1,7 +1,7 @@
 package org.geotools.tutorial.quickstart;
 
 import org.locationtech.jts.geom.Envelope;
-
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -10,8 +10,8 @@ public class RTreeLinear extends RTree {
     private static double smallestEnlargementArea = Double.POSITIVE_INFINITY;
     MBRNode searchNode;
 
-    public RTreeLinear(String filename, String valueProperty) throws IOException {
-        super(filename, valueProperty);
+    public RTreeLinear(File file, String valueProperty) throws IOException {
+        super(file, valueProperty);
     }
 
     public MBRNode addLeaf(MBRNode n, MBRNode nodeToAdd) throws Exception {

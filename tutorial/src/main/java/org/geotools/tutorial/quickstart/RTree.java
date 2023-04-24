@@ -26,12 +26,8 @@ import org.locationtech.jts.geom.MultiPolygon;
 abstract class RTree {
     public MBRNode root = new MBRNode("root");
 
-    RTree(String filename, String valueProperty) throws IOException{
+    RTree(File file, String valueProperty) throws IOException{
         int i = 0;
-        File file = new File(filename);
-        if (!file.exists())
-            throw new RuntimeException("Shapefile does not exist.");
-
         FileDataStore store = FileDataStoreFinder.getDataStore(file);
         SimpleFeatureSource featureSource = store.getFeatureSource();
         SimpleFeatureCollection all_features = featureSource.getFeatures();

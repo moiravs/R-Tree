@@ -1,6 +1,7 @@
 package org.geotools.tutorial.quickstart;
 
 import org.locationtech.jts.geom.Envelope;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 public class RTreeQuadratic extends RTree {
@@ -9,8 +10,8 @@ public class RTreeQuadratic extends RTree {
     public MBRNode root = new MBRNode("root");
     MBRNode searchNode;
 
-    public RTreeQuadratic(String filename, String valueProperty) throws IOException {
-        super(filename, valueProperty);
+    public RTreeQuadratic(File file, String valueProperty) throws IOException {
+        super(file, valueProperty);
     }
 
     public MBRNode addLeaf(MBRNode n, MBRNode nodeToAdd) throws Exception {
