@@ -3,7 +3,6 @@ package org.geotools;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.time.LocalTime;
 import java.io.IOException;
 import org.geotools.geometry.jts.GeometryBuilder;
 import org.geotools.tutorial.quickstart.MBRNode;
@@ -30,7 +29,6 @@ public class AppTest {
     @After
     public void endTimer() {
         endTime = System.currentTimeMillis();
-
         System.out.println("Total execution time: " + (endTime - startTime));
     }
     // Algorithme Linéaire

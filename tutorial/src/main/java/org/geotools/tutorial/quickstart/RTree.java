@@ -9,10 +9,52 @@ package org.geotools.tutorial.quickstart;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Point;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import org.opengis.feature.simple.SimpleFeature;
+
+
+import org.geotools.data.FileDataStore;
+import org.geotools.data.FileDataStoreFinder;
+import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.data.simple.SimpleFeatureSource;
+import org.locationtech.jts.geom.MultiPolygon;
+
 
 abstract class RTree {
+    public MBRNode root = new MBRNode("root");
 
+    RTree(String filename, String valueProperty) throws IOException{
+        int i = 0;
+        File file = new File(filename);
+        if (!file.exists())
+            throw new RuntimeException("Shapefile does not exist.");
+
+        FileDataStore store = FileDataStoreFinder.getDataStore(file);
+        SimpleFeatureSource featureSource = store.getFeatureSource();
+        SimpleFeatureCollection all_features = featureSource.getFeatures();
+
+        store.dispose();
+        try (SimpleFeatureIterator iterator = all_features.features()) {
+            while (iterator.hasNext()) {
+                SimpleFeature feature = iterator.next();
+
+                MultiPolygon polygon = (MultiPolygon) feature.getDefaultGeometry();
+                if (polygon != null && root != null && i != 50) {
+                    String label = feature.getProperty(valueProperty).getValue().toString();
+                    MBRNode nodeToAdd = new MBRNode(label, polygon);
+                    try {
+                        addLeaf(root, nodeToAdd);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.exit(0);
+                    }
+                }
+            }
+        }
+    }
 
     abstract MBRNode addLeaf(MBRNode n, MBRNode nodeToAdd) throws Exception;
 
