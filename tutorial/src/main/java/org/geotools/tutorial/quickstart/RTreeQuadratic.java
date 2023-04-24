@@ -40,15 +40,10 @@ public class RTreeQuadratic extends RTree {
                     MBRNode nodeToAdd = new MBRNode(label, polygon);
                     try {
                         addLeaf(root, nodeToAdd);
-                        // System.out.println("Start for: " + nodeToAdd.label);
-
-                        // root.print(1);
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.exit(0);
                     }
-                    // System.out.println("End of: " + nodeToAdd.label);
-                    // i++;
                 }
             }
         }
@@ -97,32 +92,7 @@ public class RTreeQuadratic extends RTree {
         }
     }
 
-    /**
-     * 
-     * @param node
-     * @param point
-     * @return
-     */
-    public MBRNode search(MBRNode node, Point point) { // appeller cette fonction avec la racine de l'arbre
-        if (node.subnodes.size() == 0) { // si c'est une feuille
-            if (node.MBR.contains(point.getX(), point.getY())) {
-                // System.out.println(node.label);
-                if (node.polygon.contains(point)) {
-                    return node;
-                }
-            }
-        } else {
-            if (node.MBR.contains(point.getX(), point.getY())) {
-                for (MBRNode subnode : node.subnodes) {
-                    MBRNode nodeFound = search(subnode, point);
-                    if (nodeFound != null)
-                        return nodeFound;
-                }
 
-            }
-        }
-        return null;
-    }
 
     public Boolean expandMBR(MBRNode node, Envelope MBR) {
         node.MBR.expandToInclude(MBR);

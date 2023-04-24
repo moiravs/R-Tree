@@ -45,14 +45,10 @@ public class RTreeLinear extends RTree {
                     MBRNode nodeToAdd = new MBRNode(label, polygon);
                     try {
                         addLeaf(root, nodeToAdd);
-                        // System.out.println("Start for: " + nodeToAdd.label);
-                        // root.print(1);
                     } catch (Exception e) {
                         e.printStackTrace();
                         System.exit(0);
                     }
-                    // System.out.println("End of: " + nodeToAdd.label);
-                    // i++;
                 }
             }
         }
