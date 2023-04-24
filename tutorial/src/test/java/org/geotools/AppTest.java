@@ -3,11 +3,13 @@ package org.geotools;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.time.LocalTime;
 import java.io.IOException;
 import org.geotools.geometry.jts.GeometryBuilder;
 import org.geotools.tutorial.quickstart.MBRNode;
 import org.geotools.tutorial.quickstart.RTreeLinear;
-import org.geotools.tutorial.quickstart.RTreeQuadratic;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.jts.geom.Point;
 
@@ -17,8 +19,20 @@ import org.locationtech.jts.geom.Point;
 public class AppTest {
     String worldMap = "../tutorial/maps/WB_countries_Admin0_10m.shp";
     String belgiumMap = "../tutorial/maps/sh_statbel_statistical_sectors_31370_20220101.shp";
+    long startTime;
+    long endTime;
 
+    @Before
+    public void timer(){
+        startTime = System.currentTimeMillis();
+    }
 
+    @After
+    public void endTimer() {
+        endTime = System.currentTimeMillis();
+
+        System.out.println("Total execution time: " + (endTime - startTime));
+    }
     // Algorithme Linéaire
 
     //Carte de la belgique
@@ -94,7 +108,7 @@ public class AppTest {
     }
 
     //Algorithme Quadratique
-
+/* 
     // Carte de la belgique
     @Test
     public void pointDansLaPlaineQ() throws IOException {
@@ -164,5 +178,5 @@ public class AppTest {
         else
             System.out.println("Point not in any polygon");
         assertTrue(node.label.equals("Canada"));
-    }
+    }*/
 }

@@ -27,6 +27,7 @@ import org.locationtech.jts.geom.Polygon;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 
 import org.geotools.geometry.jts.GeometryBuilder;
+import java.time.LocalTime;
 
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -115,7 +116,7 @@ public class Quickstart {
         else {
             for (Property prop : target.getProperties()) {
                 if (prop.getName().toString() != "the_geom") {
-                    System.out.println(prop.getName() + ": " + prop.getValue());
+                    //System.out.println(prop.getName() + ": " + prop.getValue());
                 }
             }
         }
