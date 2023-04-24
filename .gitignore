@@ -2,3 +2,11 @@
 .idea/*
 tutorial/target/*
 tutorial/maps/*
+rapport/rapport-ldp.aux
+rapport/rapport-ldp.fdb_latexmk
+rapport/rapport-ldp.fls
+rapport/rapport-ldp.log
+rapport/rapport-ldp.out
+rapport/rapport-ldp.synctex.gz
+rapport/rapport-ldp.tex
+rapport/rapport-ldp.toc
