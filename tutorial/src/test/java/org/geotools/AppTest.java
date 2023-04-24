@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.geotools.geometry.jts.GeometryBuilder;
 import org.geotools.tutorial.quickstart.MBRNode;
 import org.geotools.tutorial.quickstart.RTreeLinear;
+import org.geotools.tutorial.quickstart.RTreeQuadratic;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -108,7 +109,7 @@ public class AppTest {
     }
 
     //Algorithme Quadratique
-/* 
+ 
     // Carte de la belgique
     @Test
     public void pointDansLaPlaineQ() throws IOException {
@@ -178,5 +179,5 @@ public class AppTest {
         else
             System.out.println("Point not in any polygon");
         assertTrue(node.label.equals("Canada"));
-    }*/
+    }
 }
