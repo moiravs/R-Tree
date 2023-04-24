@@ -210,36 +210,4 @@ public class RTreeLinear extends RTree {
 
         return foundSeeds;
     }
-
-    public void pickNext(MBRNode splitSeed1, MBRNode splitSeed2, ArrayList<MBRNode> copiedSubnodes) {
-        for (MBRNode subnode : copiedSubnodes) {
-            if (subnode.MBR == splitSeed1.MBR) {
-                splitSeed1.subnodes.add(subnode);
-                subnode.parent = splitSeed1;
-                splitSeed1.MBR.expandToInclude(subnode.MBR);
-            } else if (subnode.MBR == splitSeed2.MBR) {
-                splitSeed2.subnodes.add(subnode);
-                subnode.parent = splitSeed2;
-                splitSeed2.MBR.expandToInclude(subnode.MBR);
-            } else {
-                Envelope expandedMBR1 = new Envelope(splitSeed1.MBR);
-                Envelope expandedMBR2 = new Envelope(splitSeed2.MBR);
-
-                expandedMBR1.expandToInclude(subnode.MBR);
-                expandedMBR2.expandToInclude(subnode.MBR);
-                if (expandedMBR1.getArea() - splitSeed1.MBR.getArea() > expandedMBR2.getArea()
-                        - splitSeed2.MBR.getArea()) {
-                    splitSeed2.subnodes.add(subnode);
-                    subnode.parent = splitSeed2;
-                    splitSeed2.MBR.expandToInclude(subnode.MBR);
-                } else {
-                    splitSeed1.subnodes.add(subnode);
-                    subnode.parent = splitSeed1;
-                    splitSeed1.MBR.expandToInclude(subnode.MBR);
-                }
-            }
-        }
-
-    }
-
 }

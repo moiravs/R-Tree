@@ -163,36 +163,6 @@ public class RTreeQuadratic extends RTree {
     }
 
 
-    public void pickNext(MBRNode splitSeed1, MBRNode splitSeed2, ArrayList<MBRNode> copiedSubnodes) {
-        for (MBRNode subnode : copiedSubnodes) {
-            if (subnode.MBR == splitSeed1.MBR) {
-                splitSeed1.subnodes.add(subnode);
-                subnode.parent = splitSeed1;
-                splitSeed1.MBR.expandToInclude(subnode.MBR);
-            } else if (subnode.MBR == splitSeed2.MBR) {
-                splitSeed2.subnodes.add(subnode);
-                subnode.parent = splitSeed2;
-                splitSeed2.MBR.expandToInclude(subnode.MBR);
-            } else {
-                Envelope expandedMBR1 = new Envelope(splitSeed1.MBR);
-                Envelope expandedMBR2 = new Envelope(splitSeed2.MBR);
-
-                expandedMBR1.expandToInclude(subnode.MBR);
-                expandedMBR2.expandToInclude(subnode.MBR);
-                if (expandedMBR1.getArea() - splitSeed1.MBR.getArea() > expandedMBR2.getArea()
-                        - splitSeed2.MBR.getArea()) {
-                    splitSeed2.subnodes.add(subnode);
-                    subnode.parent = splitSeed2;
-                    splitSeed2.MBR.expandToInclude(subnode.MBR);
-                } else {
-                    splitSeed1.subnodes.add(subnode);
-                    subnode.parent = splitSeed1;
-                    splitSeed1.MBR.expandToInclude(subnode.MBR);
-                }
-            }
-        }
-
-    }
 
     /**
      * For each pair of Entries compose a rectangle and pick the one with largest d
@@ -202,30 +172,6 @@ public class RTreeQuadratic extends RTree {
      * @return
      */
     public ArrayList<MBRNode> pickSeeds(MBRNode node) {
-        /*
-         * ArrayList<MBRNode> seeds = new ArrayList<MBRNode>();
-         * // parcourir tout l'arbre
-         * MBRNode seed1 = new MBRNode("seed1");
-         * MBRNode seed2 = new MBRNode("seed2");
-         * 
-         * // créer un rectangle avec les MBR des nodes dedans
-         * double rectangleMinX = Double.min(seed1.MBR.getMinX(), seed2.MBR.getMinX());
-         * double rectangleMaxX = Double.max(seed1.MBR.getMaxX(), seed2.MBR.getMaxX());
-         * double rectangleMinY = Double.min(seed1.MBR.getMinY(), seed2.MBR.getMinY());
-         * double rectangleMaxY = Double.max(seed1.MBR.getMaxY(), seed2.MBR.getMaxY());
-         * 
-         * XRectangle2D rect = XRectangle2D.createFromExtremums(rectangleMinX,
-         * rectangleMinY, rectangleMaxX,
-         * rectangleMaxY);
-         * // avoir l'area du rectangle - l'aire des deux MBR des nodes
-         * // double area = rect.getHeight() * rect.getWidth()
-         * // - (seed1.MBR.getHeight() * seed1.MBR.getWidth() + seed2.MBR.getHeight()
-         * // * seed2.MBR.getWidth());
-         * // comparer avec le meilleur rectangle
-         * 
-         * // return les seeds correspondant au plus grand area
-         * return seeds;
-         */
         double maxArea = 0;
         int M = node.subnodes.size();
         MBRNode s, t;
