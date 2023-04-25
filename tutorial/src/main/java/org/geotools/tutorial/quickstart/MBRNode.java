@@ -9,13 +9,13 @@ package org.geotools.tutorial.quickstart;
 import java.util.ArrayList;
 
 import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Polygon;
 
 public class MBRNode {
   ArrayList<MBRNode> subnodes = new ArrayList<MBRNode>();
   public String label;
   Envelope MBR;
-  MultiPolygon polygon;
+  Polygon polygon;
   MBRNode parent;
 
   public MBRNode(MBRNode node) {
@@ -30,7 +30,7 @@ public class MBRNode {
     this.label = "SplitSeed";
   }
 
-  public MBRNode(String label, MultiPolygon polygon) {
+  public MBRNode(String label, Polygon polygon) {
     this.label = label;
     this.polygon = polygon;
     createMBR();

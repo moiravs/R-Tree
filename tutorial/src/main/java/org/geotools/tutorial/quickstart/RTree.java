@@ -8,6 +8,7 @@ package org.geotools.tutorial.quickstart;
 
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,19 +39,24 @@ abstract class RTree {
         try (SimpleFeatureIterator iterator = all_features.features()) {
             while (iterator.hasNext()) {
                 SimpleFeature feature = iterator.next();
-                MultiPolygon polygon = (MultiPolygon) feature.getDefaultGeometry();
-                if (polygon != null && root != null) {
-                    String label = feature.getProperty(valueProperty).getValue().toString();
-                    MBRNode nodeToAdd = new MBRNode(label, polygon);
-                    try {
-                        addLeaf(root, nodeToAdd);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        System.exit(0);
+                MultiPolygon multipolygon = (MultiPolygon) feature.getDefaultGeometry();
+                for (int i = 0; i < multipolygon.getNumGeometries(); i++) {
+                    Polygon polygon = (Polygon) multipolygon.getGeometryN(i);
+
+                    if (polygon != null && root != null) {
+                        String label = feature.getProperty(valueProperty).getValue().toString();
+                        MBRNode nodeToAdd = new MBRNode(label, polygon);
+                        try {
+                            addLeaf(root, nodeToAdd);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.exit(0);
+                        }
                     }
                 }
             }
         }
+        System.out.println(all_features.size() + " features");
     }
 
     /**

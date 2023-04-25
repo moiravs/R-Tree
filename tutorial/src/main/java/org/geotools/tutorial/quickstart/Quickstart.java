@@ -80,31 +80,55 @@ public class Quickstart {
 
         // Point p = gb.point(172.97365198326708, 1.8869725782923172);
 
-        Point p = gb.point(r.nextInt((int) global_bounds.getMinX(), (int) global_bounds.getMaxX()),
-                r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
+        // Point p = gb.point(r.nextInt((int) global_bounds.getMinX(), (int)
+        // global_bounds.getMaxX()),
+        // r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
+        Point p = gb.point(-53.14, 4.14);
         System.out.println("point X: " + p.getX() + "point Y:" + p.getY());
         RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "NAME_FR", 4);
+        long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
+        long endTimeGlobal = System.currentTimeMillis();
+        System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
+        rtree.root.print(1);
         if (node != null)
             System.out.println(" node found = " + node.label);
         else
             System.out.println("Point not in any polygon");
 
         SimpleFeature target = null;
-
+        SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(featureSource.getSchema());
         System.out.println(all_features.size() + " features");
+        ListFeatureCollection collection = new ListFeatureCollection(featureSource.getSchema());
+        long startTimeGlobal2 = System.currentTimeMillis();
 
         try (SimpleFeatureIterator iterator = all_features.features()) {
+
             while (iterator.hasNext()) {
                 SimpleFeature feature = iterator.next();
+                MultiPolygon multipolygon = (MultiPolygon) feature.getDefaultGeometry();
+                collection.add(feature);
+                for (int i = 0; i < multipolygon.getNumGeometries(); i++) {
+                    Polygon polygon = (Polygon) multipolygon.getGeometryN(i);
+                    // for i in polygon
+                    //
 
-                MultiPolygon polygon = (MultiPolygon) feature.getDefaultGeometry();
+                    featureBuilder.add(gb.box(polygon.getEnvelopeInternal().getMinX(),
+                            polygon.getEnvelopeInternal().getMinY(),
+                            polygon.getEnvelopeInternal().getMaxX(),
+                            polygon.getEnvelopeInternal().getMaxY()));
+                    collection.add(featureBuilder.buildFeature(null));
 
-                if (polygon != null && polygon.contains(p)) {
+                }
+                if (multipolygon != null && multipolygon.contains(p)) {
                     target = feature;
+                    long endTimeGlobal2 = System.currentTimeMillis();
+                    System.out.println(
+                            "Total search function execution time: " + (endTimeGlobal2 - startTimeGlobal2));
                     break;
                 }
             }
+
         }
 
         if (target == null)
@@ -113,7 +137,7 @@ public class Quickstart {
         else {
             for (Property prop : target.getProperties()) {
                 if (prop.getName().toString() != "the_geom") {
-                    // System.out.println(prop.getName() + ": " + prop.getValue());
+                    System.out.println(prop.getName() + ": " + prop.getValue());
                 }
             }
         }
@@ -125,11 +149,7 @@ public class Quickstart {
         Layer layer = new FeatureLayer(featureSource, style);
         map.addLayer(layer);
 
-        ListFeatureCollection collection = new ListFeatureCollection(featureSource.getSchema());
-        SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(featureSource.getSchema());
-
         // Add target polygon
-        collection.add(target);
 
         // Add Point
         Polygon c = gb.circle(p.getX(), p.getY(), all_features.getBounds().getWidth() / 200, 10);
@@ -137,16 +157,18 @@ public class Quickstart {
         collection.add(featureBuilder.buildFeature(null));
 
         // Add MBR
-        if (target != null) {
-            featureBuilder.add(gb.box(target.getBounds().getMinX(),
-                    target.getBounds().getMinY(),
-                    target.getBounds().getMaxX(),
-                    target.getBounds().getMaxY()));
-
-            // collection.add(featureBuilder.buildFeature(null));
-
-            collection.add(featureBuilder.buildFeature(null));
-        }
+        /*
+         * if (target != null) {
+         * featureBuilder.add(gb.box(target.getBounds().getMinX(),
+         * target.getBounds().getMinY(),
+         * target.getBounds().getMaxX(),
+         * target.getBounds().getMaxY()));
+         * 
+         * // collection.add(featureBuilder.buildFeature(null));
+         * 
+         * collection.add(featureBuilder.buildFeature(null));
+         * }
+         */
 
         Style style2 = SLD.createLineStyle(Color.red, 2.0f);
         Layer layer2 = new FeatureLayer(collection, style2);
