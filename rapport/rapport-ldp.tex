@@ -53,6 +53,12 @@
   \subsection{Split Linéaire}
 
   \subsection{Split Quadratique}
+  L'algorithme de split quadratique commence par appeler le pickSeeds quadratique afin d'obtenir deux noeuds qui, leurs aires sommées, 
+  prennent plus de place que le Minimum Bounding Rectangle qui les entoure.
+  \newline Ensuite, la méthode pickNext s'assure de choisir, pour chaque sous-noeud, la seed dont le MBR augmente le moins avec ce sous-noeud, et 
+  le sous-noeud devient alors l'enfant de cette seed.
+  \newline Pour finir, les deux splitSeeds obtenus via pickSeeds reçoivent comme parent le node (celui que l'on doit split) et, réciproquement, 
+  le node reçoit les deux splitSeeds comme ses enfants. Le noeud a été divisé.
 
 
 
@@ -98,7 +104,7 @@
   prenaient énormément de place. Nous avons donc décidé de séparer les
   multi-polygones en polygones et ça a donné (figure aprèsopti). Cela nous a
   permis de gagner quelques secondes lors des tests dont nous parlerons au
-  chapitre "Analyse des tests".
+  chapitre 'Analyse des tests'.
 
   \subsection{Split}
   \par
@@ -122,9 +128,9 @@
   Dans le pickSeeds quadratique, nous itérons à travers le vecteur d'enfants du node à
   split et nous prenons les deux noeuds les plus éloignés. Nous avons vite
   remarqué qu'il n'était pas nécéssaire de faire un double for en itérant chaque
-  élément dans le vecteur. En effet, si nous calculons pour l'aire pour le noeud A
+  élément dans le vecteur. En effet, si nous calculons l'aire pour le noeud A
   et pour le noeud B, il ne faut pas recalculer pour le noeud B et le noeud A, de
-  même qu'il ne faut pas calculer pour l'aire pour le noeud A et le noeud A. Nous
+  même qu'il ne faut pas calculer l'aire pour le noeud A et le noeud A. Nous
   faisons donc deux boucles for, l'une itérant dans le vecteur entier de
   sous-noeuds, l'autre commençant à l'indice de la précédente boucle + 1. De cette
   manière, nous commençons avec le noeud A et calculons avec le noeud B et tous

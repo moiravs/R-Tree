@@ -8,9 +8,9 @@
 \contentsline {subsection}{\numberline {3.2}RTreeLinear}{2}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}RTreeQuadratic}{2}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}RTree}{2}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}FileLoader}{2}{subsection.3.5}%
-\contentsline {section}{\numberline {4}Optimisations}{2}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Multi-polygones}{2}{subsection.4.1}%
+\contentsline {subsection}{\numberline {3.5}FileLoader}{3}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Optimisations}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Multi-polygones}{3}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Split}{3}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}PickSeeds quadratique}{3}{subsection.4.3}%
 \contentsline {section}{\numberline {5}Expérience sur données réelles}{3}{section.5}%
