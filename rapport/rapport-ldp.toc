@@ -5,15 +5,22 @@
 \contentsline {subsection}{\numberline {2.3}Split Quadratique}{2}{subsection.2.3}%
 \contentsline {section}{\numberline {3}Structure du code}{2}{section.3}%
 \contentsline {subsection}{\numberline {3.1}MBRNode}{2}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}RTreeLinear}{3}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}RTreeQuadratic}{3}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}RTree}{3}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}FileLoader}{3}{subsection.3.5}%
-\contentsline {section}{\numberline {4}Expérience sur données réelles}{3}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Présentation des tests}{3}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Présentation des cartes}{3}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Résultats des tests}{4}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Conclusion des tests}{4}{subsection.4.4}%
-\contentsline {section}{\numberline {5}Conclusion}{4}{section.5}%
-\contentsline {section}{\numberline {6}Bibliographie}{5}{section.6}%
-\contentsline {section}{\numberline {7}Annexes}{5}{section.7}%
+\contentsline {subsection}{\numberline {3.2}RTreeLinear}{2}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}RTreeQuadratic}{2}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}RTree}{2}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}FileLoader}{2}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Optimisations}{2}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Multi-polygones}{2}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Split}{3}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}PickSeeds quadratique}{3}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Expérience sur données réelles}{3}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Présentation des tests}{3}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Présentation des cartes}{4}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Résultats des tests}{4}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Analyse des données}{5}{subsection.5.4}%
+\contentsline {subsubsection}{\numberline {5.4.1}Optimisation}{5}{subsubsection.5.4.1}%
+\contentsline {subsubsection}{\numberline {5.4.2}Influence du N}{5}{subsubsection.5.4.2}%
+\contentsline {subsubsection}{\numberline {5.4.3}Algorithme linéaire vs Algorithme quadratique}{5}{subsubsection.5.4.3}%
+\contentsline {section}{\numberline {6}Conclusion}{5}{section.6}%
+\contentsline {section}{\numberline {7}Bibliographie}{6}{section.7}%
+\contentsline {section}{\numberline {8}Annexes}{6}{section.8}%
