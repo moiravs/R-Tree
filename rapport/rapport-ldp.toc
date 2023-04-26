@@ -9,7 +9,7 @@
 \contentsline {subsection}{\numberline {2.3}RTreeLinear et RTreeQuadratic}{3}{subsection.2.3}%
 \contentsline {subsubsection}{\numberline {2.3.1}PickSeeds quadratique}{3}{subsubsection.2.3.1}%
 \contentsline {subsubsection}{\numberline {2.3.2}PickSeeds linéaire}{3}{subsubsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.4}FileLoader}{3}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.4}FileLoader}{4}{subsection.2.4}%
 \contentsline {section}{\numberline {3}Optimisations}{4}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Multi-polygones}{4}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Split}{4}{subsection.3.2}%

@@ -129,6 +129,11 @@
   représente donc le R-Tree avec l'algorithme de split quadratique.
 
   \subsubsection{PickSeeds quadratique}
+  Le pickSeeds quadratique cherche les deux seeds qui maximisent l'aire de l'enveloppe qui les entoure.
+  \newline Pour ce faire, nous itérons à travers tous les sous-noeuds du noeud donné en paramètre, 
+  et nous calculons la différence d'aire entre l'union de deux sous-noeuds consécutifs et l'aire de 
+  ces derniers séparement (enveloppe(les 2 sous-noeuds) - enveloppe(premier sous-noeud) - enveloppe(deuxième sous-noeud)).
+  \newline Le pickSeeds retourne donc un vecteur contenant les deux seeds choisies.
   \subsubsection{PickSeeds linéaire}
   \par
   \indent
