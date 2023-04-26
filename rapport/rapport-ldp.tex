@@ -26,73 +26,136 @@
 
   \author{Andrius Ezerskis \& Moïra Vanderslagmolen}
   \title{Projet d'Algorithmique: R-trees}
-
   \maketitle
 \end{titlepage}
 \tableofcontents
 \newpage
 \begin{large}
+  Le Tableau x reprend les temps d’exé-
+  cution, exprimés en micro-secondes CPU,
+  sur les différents ensembles de données.
+  Ces tests ont été effectués sur une machine
+  ayant les caractéristiques suivantes : Dell
+  Dual Core, 2.66 GHz, 2 Gb RAM, système
+  SuSE Linux 10.0 (kernel 2.4.2), java 1.5.0,
+  etc. Pour calculer le temps CPU, la classe
+  ThreadMXBean a été utilisée
 
+
+  dire quelles librairies on a utilisé
 
 
   \section{Introduction}
   \indent
   \par
-
+  Ce rapport se divise en plusieurs parties. Tout d'abord, nous expliquons la
+  structure de notre code.
 
   \par
-  \section{RTree}
-  \subsection{Création RTree}
-  \par
-  \indent
-  Au début, nous avions N, le truc maximum pr les RTree en attribut de la classe RTree et défini là dedans.
-  Pour optimiser notre programme, nous avons décidé de le passer en paramètre.
-  Grâce à cette amélioration, les 8 tests que nous avons fait tourner ont pris
-  4,429 secondes au total au lieu de 5,865 secondes.
-
-  \subsection{Split Linéaire}
-
-  \subsection{Split Quadratique}
-  L'algorithme de split quadratique commence par appeler le pickSeeds quadratique afin d'obtenir deux noeuds qui, leurs aires sommées, 
-  prennent plus de place que le Minimum Bounding Rectangle qui les entoure.
-  \newline Ensuite, la méthode pickNext s'assure de choisir, pour chaque sous-noeud, la seed dont le MBR augmente le moins avec ce sous-noeud, et 
-  le sous-noeud devient alors l'enfant de cette seed.
-  \newline Pour finir, les deux splitSeeds obtenus via pickSeeds reçoivent comme parent le node (celui que l'on doit split) et, réciproquement, 
-  le node reçoit les deux splitSeeds comme ses enfants. Le noeud a été divisé.
-
-
-
   \section{Structure du code}
 
   \par
   \subsection{MBRNode}
   \par
   \indent
-  MBRNode représente les noeuds des R-Tree. Elle contient un label, un polygone,
+  MBRNode représente les noeuds des R-Tree. Elle contient un label, un Minimum Bouding Rectangle(MBR),un polygone,
   des enfants (sauf si c'est une feuille) et un parent (sauf si c'est la racine de
-  l'arbre). Si le noeud n'est pas une feuille, alors son label sera "SplitSeed",
-  car il regroupe plusieurs polygones.
+  l'arbre). Si le noeud n'est pas une feuille, alors son label sera `SplitSeed',
+  car il contient l'union de tous les MBR de ses enfants.
 
-  \subsection{RTreeLinear}\label{RTreeLinear}
-  \par
-  \indent
-  RTreeLinear représente l'implémentation du R-Tree avec l'algorithme de split linéaire.
-  \subsection{RTreeQuadratic}\label{RTreeQ}
+
 
   \subsection{RTree}
   \par
   \indent
   RTree est une classe abstraite. Elle permet de regrouper ensemble les méthodes
-  communes à RTreeLinear et RTreeQuadratic, par exemple la
-  recherche d'un noeud (searchNode), l'initialisation de la classe
+  communes à RTreeLinear et RTreeQuadratic, par exemple la recherche d'un noeud
+  (searchNode), l'initialisation de la classe, les méthodes split, pickNext,
+  chooseNode et addLeaf.
 
+
+
+
+  \subsubsection{addLeaf}
+  \par
+  \indent
+  Lorsque nous voulons ajouter un nouveau node, la méthode addLeaf() est appelée
+  avec la racine de l'arbre en paramètre. Si la racine de l'arbre n'a pas
+  d'enfants ou que son premier enfant n'a pas d'enfant, alors nous rajoutons le
+  nouveau node. Ensuite, nous augmentons le MBR du parent, ainsi que celui de
+  ses parents. Sinon, nous choisissons un noeud grâce à la méthode chooseNode et
+  puis la méthode addLeaf est de nouveau appelée, avec cette fois-ci le node
+  choisi par la méthode chooseNode.
+  \par
+  \indent
+  Si le nombre d'enfants du node passé en paramètre dépasse un nombre N, alors
+  un split est effectué.
+  \par
+  \subsubsection{split}
+  \par
+  \indent
+  L'algorithme de split commence par appeler le pickSeeds quadratique ou
+  linéaire afin d'obtenir deux noeuds qui, leurs aires sommées, prennent plus de
+  place que le Minimum Bounding Rectangle qui les entoure. \newline Ensuite, la
+  méthode pickNext s'assure de choisir, pour chaque sous-noeud, la seed dont le
+  MBR augmente le moins avec ce sous-noeud, et le sous-noeud devient alors
+  l'enfant de cette seed. \newline Pour finir, les deux splitSeeds obtenus via
+  pickSeeds reçoivent comme parent le node (celui que l'on doit split) et,
+  réciproquement, le node reçoit les deux splitSeeds comme ses enfants. Le noeud
+  a été divisé.
+  \par
+
+  \subsubsection{chooseNode}
+  \par
+  \indent
+  La méthode chooseNode prend en paramètre le bestNode et le noeud à ajouter.
+  Si le bestNode n'a pas d'enfants ou si son premier enfant n'a pas d'enfants,
+  alors le bestNode est renvoyé. Sinon, nous itérons à travers les enfants de
+  bestNode. Le noeud dont le MBR augmente le moins avec le noeud à ajouter est
+  choisi. Nous appelons ensuite récursivement la méthode chooseNode.
+
+  \par
+  \subsubsection{search}
+  \par
+  \indent
+
+
+  \par
+  \subsection{RTreeLinear et RTreeQuadratic}\label{RTreeLinear}
+  \par
+  \indent
+  RTreeLinear représente l'implémentation du R-Tree avec l'algorithme de split
+  linéaire, dont on reparle dans la section PickSeedsLinear. RTreeQuadratic
+  représente donc le R-Tree avec l'algorithme de split quadratique.
+
+  \subsubsection{PickSeeds quadratique}
+  \subsubsection{PickSeeds linéaire}
+  \par
+  \indent
+  Le pickSeeds linéaire commence par itérer dans chaque sous-noeud du noeud
+  qu'on veut split. Ensuite, nous choisissons le noeud dont le côté droit du MBR
+  associé a le plus petit x, le noeud dont le côté gauche du MBR a le plus grand
+  x. Nous faisons de même avec la dimension y. Par après, nous testons si les
+  nodes sont tous les mêmes, ou si les noeuds d'une dimension sont les mêmes.
+  Dans le premier cas, nous renvoyons null et le split ne se produit pas. En
+  effet, si les seeds trouvées sont les mêmes, alors le split ne se produira pas
+  correctement car tous les noeuds iront donc dans la première seed. Dans le
+  deuxième cas, nous choisissons l'autre dimension dont les seeds ne sont pas
+  les mêmes.
+  \par
+  \indent
+  Si les noeuds sont tous différents, nous calculons la normalisation, qui
+  correspond au ratio entre les côtés internes et les côtés externes pour chaque
+  dimension(dans ce projet-ci, la dimension x et y). Nous prenons ensuite la
+  normalisation la plus élevée.
+  \par
 
   \subsection{FileLoader}
   \par
   \indent
-  Cette classe permet de charger le fichier en mémoire. Nous avons implémenté
-  cette classe afin de facilement changer la façon dont les fichiers sont chargés
-  en mémoire.
+  Cette classe permet de charger le shapefile en mémoire. Nous avons implémenté
+  cette classe afin de facilement changer la façon dont les fichiers sont chargés.
+
 
   \section{Optimisations}
   \subsection{Multi-polygones}
@@ -134,9 +197,15 @@
   faisons donc deux boucles for, l'une itérant dans le vecteur entier de
   sous-noeuds, l'autre commençant à l'indice de la précédente boucle + 1. De cette
   manière, nous commençons avec le noeud A et calculons avec le noeud B et tous
-  les autres noeuds restants, puis le noeud B avec le noeud C et ainsi de suite.
-  Cela nous permet de réduire le temps d'exécution.
+  les autres noeuds restants, puis le noeud B avec le noeud C et ainsi de suite. Cela nous permet de réduire le temps d'exécution.
+
+  \subsection{N}
   \par
+  \indent
+  Au début, nous avions N, le truc maximum pr les RTree en attribut de la classe RTree et défini là dedans.
+  Pour optimiser notre programme, nous avons décidé de le passer en paramètre.
+  Grâce à cette amélioration, les 8 tests que nous avons fait tourner ont pris
+  4,429 secondes au total au lieu de 5,865 secondes.
 
 
   \section{Expérience sur données réelles}

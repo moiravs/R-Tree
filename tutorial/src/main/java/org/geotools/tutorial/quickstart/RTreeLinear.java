@@ -69,13 +69,13 @@ public class RTreeLinear extends RTree {
             foundSeeds.add(new MBRNode(MBRBestMinY));
             foundSeeds.add(new MBRNode(MBRBestMaxY));
         } else {
-            double widthInner = MBRBestMinX.getMaxX() - MBRBestMaxX.getMinX();
-            double widthOuter = MBRBestMinX.getMinX() - MBRBestMaxX.getMaxX();
-            double separationWidth = widthInner / widthOuter;
+            double innerWidth = MBRBestMinX.getMaxX() - MBRBestMaxX.getMinX();
+            double outerWidth = MBRBestMinX.getMinX() - MBRBestMaxX.getMaxX();
+            double separationWidth = innerWidth / outerWidth;
 
-            double heightInner = MBRBestMinY.getMaxY() - MBRBestMaxY.getMinY();
-            double heightOuter = MBRBestMinY.getMinY() - MBRBestMaxY.getMaxY();
-            double separationHeight = heightInner / heightOuter;
+            double innerHeight = MBRBestMinY.getMaxY() - MBRBestMaxY.getMinY();
+            double outerHeight = MBRBestMinY.getMinY() - MBRBestMaxY.getMaxY();
+            double separationHeight = innerHeight / outerHeight;
             if (separationWidth > separationHeight) {
 
                 foundSeeds.add(new MBRNode(MBRBestMinX));

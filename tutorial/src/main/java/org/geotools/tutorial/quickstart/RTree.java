@@ -13,7 +13,6 @@ import org.locationtech.jts.geom.Polygon;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -27,7 +26,6 @@ import org.locationtech.jts.geom.MultiPolygon;
 abstract class RTree {
     public MBRNode root = new MBRNode("root");
     private static int N;
-    private static double smallestEnlargementArea = Double.POSITIVE_INFINITY;
 
     RTree(File file, String valueProperty, int _N) throws IOException {
         N = _N;
@@ -39,9 +37,9 @@ abstract class RTree {
         try (SimpleFeatureIterator iterator = all_features.features()) {
             while (iterator.hasNext()) {
                 SimpleFeature feature = iterator.next();
-                MultiPolygon multipolygon = (MultiPolygon) feature.getDefaultGeometry();
-                for (int i = 0; i < multipolygon.getNumGeometries(); i++) {
-                    Polygon polygon = (Polygon) multipolygon.getGeometryN(i);
+                MultiPolygon multiPolygon = (MultiPolygon) feature.getDefaultGeometry();
+                for (int i = 0; i < multiPolygon.getNumGeometries(); i++) {
+                    Polygon polygon = (Polygon) multiPolygon.getGeometryN(i);
 
                     if (polygon != null && root != null) {
                         String label = feature.getProperty(valueProperty).getValue().toString();
@@ -143,7 +141,7 @@ abstract class RTree {
         return node;
     }
 
-    public MBRNode addLeaf(MBRNode n, MBRNode nodeToAdd) throws Exception {
+    public void addLeaf(MBRNode n, MBRNode nodeToAdd) throws Exception {
         if (n.subnodes.size() == 0 || n.subnodes.get(0).subnodes.size() == 0) { // if bottom level is reached -> create
             n.subnodes.add(nodeToAdd); // create leaf
             nodeToAdd.parent = n;
@@ -155,7 +153,6 @@ abstract class RTree {
         if (n.subnodes.size() >= N) {
             split(n);
         }
-        return null;
     }
 
     /**
@@ -168,6 +165,8 @@ abstract class RTree {
             return bestNode;
         } else {
             MBRNode bestChildNode = new MBRNode("SplitNode");
+            double smallestEnlargementArea = Double.POSITIVE_INFINITY;
+
             for (MBRNode subnode : bestNode.subnodes) {
                 Envelope copiedEnvelope = new Envelope(subnode.MBR);
                 copiedEnvelope.expandToInclude(nodeToAdd.MBR);
@@ -180,7 +179,6 @@ abstract class RTree {
             if (bestChildNode.label == "SplitNode") {
                 throw new RuntimeException();
             }
-            smallestEnlargementArea = Double.POSITIVE_INFINITY;
             return chooseNode(bestChildNode, nodeToAdd);
         }
     }
