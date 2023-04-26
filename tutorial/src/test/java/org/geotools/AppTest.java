@@ -7,6 +7,8 @@ package org.geotools;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.geotools.geometry.jts.GeometryBuilder;
 import org.geotools.tutorial.quickstart.FileLoader;
 import org.geotools.tutorial.quickstart.MBRNode;
@@ -47,7 +49,7 @@ public class AppTest {
 
     // 1er test - Carte de la belgique - Algorithme linéaire
     @Test
-    public void TestA_assertPointIsInCampus() {
+    public void TestA_assertPointIsInCampus() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -66,7 +68,7 @@ public class AppTest {
 
     // 2ème test - Carte de la belgique - Algorithme linéaire
     @Test
-    public void TestB_assertPointIsNull() {
+    public void TestB_assertPointIsNull() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -85,7 +87,7 @@ public class AppTest {
 
     // 3ème test - Carte du monde - Algorithme linéaire
     @Test
-    public void TestC_assertPointIsInKazakhstan() {
+    public void TestC_assertPointIsInKazakhstan() throws IOException {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -124,7 +126,7 @@ public class AppTest {
 
     // 5ème test - Carte de la france - Algorithme linéaire
     @Test
-    public void TestE_assertPointIsInAuvergne() {
+    public void TestE_assertPointIsInAuvergne() throws IOException {
         String filename = franceMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -143,7 +145,7 @@ public class AppTest {
 
     // 6ème test - Carte de la france - Algorithme linéaire
     @Test
-    public void TestF_assertPointIsInGuyane() {
+    public void TestF_assertPointIsInGuyane() throws IOException {
         String filename = franceMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -162,7 +164,7 @@ public class AppTest {
 
     // 7ème test - Carte de la belgique - Algorithme quadratique
     @Test
-    public void TestG_assertPointIsInCampus() {
+    public void TestG_assertPointIsInCampus() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -182,7 +184,7 @@ public class AppTest {
 
     // 8ème test - Carte de la belgique - Algorithme quadratique
     @Test
-    public void TestH_assertPointIsNotInAnyPolygon() {
+    public void TestH_assertPointIsNotInAnyPolygon() throws IOException {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -201,7 +203,7 @@ public class AppTest {
 
     // 9ème test - Carte du monde - Algorithme quadratique
     @Test
-    public void TestI_assertPointIsInKazakhstan() {
+    public void TestI_assertPointIsInKazakhstan() throws IOException {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -220,7 +222,7 @@ public class AppTest {
 
     // 10ème test - Carte du monde - Algorithme quadratique
     @Test
-    public void TestJ_assertPointIsInCanada() {
+    public void TestJ_assertPointIsInCanada() throws IOException {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -239,7 +241,7 @@ public class AppTest {
 
     // 11ème test - Carte de la france - Algorithme linéaire
     @Test
-    public void TestK_assertPointIsInAuvergne() {
+    public void TestK_assertPointIsInAuvergne() throws IOException {
         String filename = franceMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -259,7 +261,7 @@ public class AppTest {
 
     // 12ème test - Carte de la france - Algorithme linéaire
     @Test
-    public void TestL_assertPointIsInGuyane() {
+    public void TestL_assertPointIsInGuyane() throws IOException {
         String filename = franceMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();

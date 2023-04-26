@@ -33,7 +33,7 @@ abstract class RTree {
      * @param file          Objet File
      * @param valueProperty Attribut de la propriété à récupérer
      * @param _N            Le nombre d'enfants maximum pour un node
-     * @throws IOException
+     * @throws IOException File Error in geotools
      */
     RTree(File file, String valueProperty, int _N) throws IOException {
         N = _N;
@@ -42,18 +42,17 @@ abstract class RTree {
         SimpleFeatureCollection all_features = featureSource.getFeatures();
 
         store.dispose();
-        try (SimpleFeatureIterator iterator = all_features.features()) {
-            while (iterator.hasNext()) {
-                SimpleFeature feature = iterator.next();
-                MultiPolygon multiPolygon = (MultiPolygon) feature.getDefaultGeometry();
-                for (int i = 0; i < multiPolygon.getNumGeometries(); i++) {
-                    Polygon polygon = (Polygon) multiPolygon.getGeometryN(i);
+        SimpleFeatureIterator iterator = all_features.features();
+        while (iterator.hasNext()) {
+            SimpleFeature feature = iterator.next();
+            MultiPolygon multiPolygon = (MultiPolygon) feature.getDefaultGeometry();
+            for (int i = 0; i < multiPolygon.getNumGeometries(); i++) {
+                Polygon polygon = (Polygon) multiPolygon.getGeometryN(i);
 
-                    if (polygon != null && root != null) {
-                        String label = feature.getProperty(valueProperty).getValue().toString();
-                        MBRNode nodeToAdd = new MBRNode(label, polygon);
-                        addLeaf(root, nodeToAdd);
-                    }
+                if (polygon != null && root != null) {
+                    String label = feature.getProperty(valueProperty).getValue().toString();
+                    MBRNode nodeToAdd = new MBRNode(label, polygon);
+                    addLeaf(root, nodeToAdd);
                 }
             }
         }

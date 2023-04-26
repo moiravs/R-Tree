@@ -8,12 +8,12 @@ package org.geotools.tutorial.quickstart;
 import org.locationtech.jts.geom.Envelope;
 
 import java.io.File;
-
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class RTreeQuadratic extends RTree {
 
-    public RTreeQuadratic(File file, String valueProperty, int N) {
+    public RTreeQuadratic(File file, String valueProperty, int N) throws IOException {
         super(file, valueProperty, N);
     }
 
