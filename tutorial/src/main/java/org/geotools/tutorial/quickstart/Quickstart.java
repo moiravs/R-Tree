@@ -6,39 +6,18 @@
 
 package org.geotools.tutorial.quickstart;
 
-import java.awt.Color;
 import java.util.Random;
 
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureSource;
-import org.geotools.data.collection.ListFeatureCollection;
-import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.data.simple.SimpleFeatureIterator;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.geometry.jts.GeometryBuilder;
-import org.geotools.map.FeatureLayer;
-import org.geotools.map.Layer;
-import org.geotools.map.MapContent;
-import org.geotools.styling.SLD;
-import org.geotools.styling.Style;
-import org.geotools.swing.JMapFrame;
 
-import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.Polygon;
-
-import org.opengis.feature.Property;
-import org.opengis.feature.simple.SimpleFeature;
 
 public class Quickstart {
 
-    /**
-     * GeoTools Quickstart demo application. Prompts the user for a shapefile and
-     * displays its
-     * contents on the screen in a map frame
-     */
     public static void main(String[] args) throws Exception {
         // display a data store file chooser dialog for shapefiles
         String filename = "../tutorial/maps/WB_countries_Admin0_10m.shp";
@@ -46,12 +25,9 @@ public class Quickstart {
 
         FileDataStore store = FileDataStoreFinder.getDataStore(loader.loadFile());
         SimpleFeatureSource featureSource = store.getFeatureSource();
-        SimpleFeatureCollection all_features = featureSource.getFeatures();
-
         ReferencedEnvelope global_bounds = featureSource.getBounds();
 
         Random r = new Random();
-
         GeometryBuilder gb = new GeometryBuilder();
 
         Point p = gb.point(r.nextInt((int) global_bounds.getMinX(), (int) global_bounds.getMaxX()),
@@ -73,7 +49,6 @@ public class Quickstart {
             System.out.println(" node found = " + node.label);
         else
             System.out.println("Point not in any polygon");
-        System.out.println(all_features.size() + " features");
         System.exit(0);
     }
 
