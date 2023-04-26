@@ -1,30 +1,26 @@
+/*
+ * Project for the course of INFO-F203 : R-Trees
+ * Date: Thursday, March 30th 2023, 12:09:05 pm
+ * Author: Moïra Vanderslagmolen & Andrius Ezerskis
+ */
 package org.geotools;
 
 import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
 
 import org.geotools.geometry.jts.GeometryBuilder;
 import org.geotools.tutorial.quickstart.FileLoader;
 import org.geotools.tutorial.quickstart.MBRNode;
 import org.geotools.tutorial.quickstart.RTreeLinear;
 import org.geotools.tutorial.quickstart.RTreeQuadratic;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.runner.OrderWith;
-import org.locationtech.jts.geom.Point;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-/**
- * Unit test for simple App.
- */
+import org.locationtech.jts.geom.Point;
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AppTest {
     String worldMap = "../tutorial/maps/WB_countries_Admin0_10m.shp";
@@ -51,12 +47,11 @@ public class AppTest {
 
     // 1er test - Carte de la belgique - Algorithme linéaire
     @Test
-    public void ApointDansLaPlaineL() throws IOException {
+    public void TestA_assertPointIsInCampus() {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
-        // Point p = gb.point(-119.0, 56.0);
-        Point p = gb.point(152183, 167679);// Plaine
+        Point p = gb.point(152183, 167679);
         RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "T_SEC_FR", N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
@@ -71,11 +66,11 @@ public class AppTest {
 
     // 2ème test - Carte de la belgique - Algorithme linéaire
     @Test
-    public void BpointJusteEnDehorsL() throws IOException {
+    public void TestB_assertPointIsNull() {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
-        Point p = gb.point(215113.0, 217404.0);// Plaine
+        Point p = gb.point(215113.0, 217404.0);
         RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "T_SEC_FR", N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
@@ -90,11 +85,11 @@ public class AppTest {
 
     // 3ème test - Carte du monde - Algorithme linéaire
     @Test
-    public void CpointInKazakhstanL() throws IOException {
+    public void TestC_assertPointIsInKazakhstan() {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
-        Point p = gb.point(73.0, 43.0);// Plaine
+        Point p = gb.point(73.0, 43.0);
         RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "NAME_FR", N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
@@ -109,7 +104,7 @@ public class AppTest {
 
     // 4ème test - Carte du monde - Algorithme linéaire
     @Test
-    public void DshouldAnswerWithTrueL() throws Exception {
+    public void TestD_assertPointIsInCanada() throws Exception {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -129,7 +124,7 @@ public class AppTest {
 
     // 5ème test - Carte de la france - Algorithme linéaire
     @Test
-    public void EashouldAnswerWithTrueQ() throws IOException {
+    public void TestE_assertPointIsInAuvergne() {
         String filename = franceMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -148,7 +143,7 @@ public class AppTest {
 
     // 6ème test - Carte de la france - Algorithme linéaire
     @Test
-    public void EbshouldAnswerWithTrueQ() throws IOException {
+    public void TestF_assertPointIsInGuyane() {
         String filename = franceMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -167,12 +162,12 @@ public class AppTest {
 
     // 7ème test - Carte de la belgique - Algorithme quadratique
     @Test
-    public void EpointDansLaPlaineQ() throws IOException {
+    public void TestG_assertPointIsInCampus() {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         // Point p = gb.point(-119.0, 56.0);
-        Point p = gb.point(152183, 167679);// Plaine
+        Point p = gb.point(152183, 167679);
         RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "T_SEC_FR", N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
@@ -187,11 +182,11 @@ public class AppTest {
 
     // 8ème test - Carte de la belgique - Algorithme quadratique
     @Test
-    public void FpointJusteEnDehorsQ() throws IOException {
+    public void TestH_assertPointIsNotInAnyPolygon() {
         String filename = belgiumMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
-        Point p = gb.point(215113.0, 217404.0);// Plaine
+        Point p = gb.point(215113.0, 217404.0);
         RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "T_SEC_FR", N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
@@ -206,11 +201,11 @@ public class AppTest {
 
     // 9ème test - Carte du monde - Algorithme quadratique
     @Test
-    public void GpointInKazakhstanQ() throws IOException {
+    public void TestI_assertPointIsInKazakhstan() {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
-        Point p = gb.point(73.0, 43.0);// Plaine
+        Point p = gb.point(73.0, 43.0);
         RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "NAME_FR", N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
@@ -225,7 +220,7 @@ public class AppTest {
 
     // 10ème test - Carte du monde - Algorithme quadratique
     @Test
-    public void HshouldAnswerWithTrueQ() throws IOException {
+    public void TestJ_assertPointIsInCanada() {
         String filename = worldMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -244,7 +239,7 @@ public class AppTest {
 
     // 11ème test - Carte de la france - Algorithme linéaire
     @Test
-    public void IshouldAnswerWithTrueQ() throws IOException {
+    public void TestK_assertPointIsInAuvergne() {
         String filename = franceMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
@@ -264,7 +259,7 @@ public class AppTest {
 
     // 12ème test - Carte de la france - Algorithme linéaire
     @Test
-    public void MshouldAnswerWithTrueQ() throws IOException {
+    public void TestL_assertPointIsInGuyane() {
         String filename = franceMap;
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();

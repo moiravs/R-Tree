@@ -1,26 +1,29 @@
+/*
+ * Project for the course of INFO-F203 : R-Trees
+ * Date: Thursday, March 30th 2023, 12:09:05 pm
+ * Author: Moïra Vanderslagmolen & Andrius Ezerskis
+ */
 package org.geotools.tutorial.quickstart;
 
 import org.locationtech.jts.geom.Envelope;
+
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.ArrayList;
 
 public class RTreeQuadratic extends RTree {
 
-    public RTreeQuadratic(File file, String valueProperty, int N) throws IOException {
+    public RTreeQuadratic(File file, String valueProperty, int N) {
         super(file, valueProperty, N);
     }
 
     /**
-     * For each pair of Entries compose a rectangle and pick the one with largest d
-     * Choisir les deux seeds les + éloignées possibles
-     * pair with de largest d, d = area(J) - area(E1*I) - area(E2*I)
+     * Choisi les deux meilleures seeds parmi les enfants du paramètre node.
      * 
-     * @return
-     * @throws Exception
+     * @param node
+     * @return Les deux seeds choisies
      */
-    public ArrayList<MBRNode> pickSeeds(MBRNode node) throws Exception {
+    public ArrayList<MBRNode> pickSeeds(MBRNode node) {
         double maxArea = 0;
         int M = node.subnodes.size();
         MBRNode seed1 = new MBRNode("test");

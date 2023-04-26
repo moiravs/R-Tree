@@ -1,5 +1,5 @@
 /*
- * Project : 
+ * Project for the course of INFO-F203 : R-Trees
  * Date: Saturday, March 18th 2023, 5:42:19 pm
  * Author: Moïra Vanderslagmolen & Andrius Ezerskis
  */
@@ -7,46 +7,31 @@
 package org.geotools.tutorial.quickstart;
 
 import java.awt.Color;
-import java.io.File;
+import java.util.Random;
 
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
-
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.data.collection.ListFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.geometry.jts.GeometryBuilder;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.Layer;
 import org.geotools.map.MapContent;
 import org.geotools.styling.SLD;
 import org.geotools.styling.Style;
+import org.geotools.swing.JMapFrame;
 
 import org.locationtech.jts.geom.MultiPolygon;
-
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
-import org.geotools.geometry.jts.ReferencedEnvelope;
 
-import org.geotools.geometry.jts.GeometryBuilder;
-import java.time.LocalTime;
-
-import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.data.simple.SimpleFeatureIterator;
 import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
 
-import java.util.Random;
-
-import org.geotools.swing.JMapFrame;
-
-/**
- * Prompts the user for a shapefile and displays the contents on the screen in a
- * map frame.
- *
- * <p>
- * This is the GeoTools Quickstart application used in documentation a and
- * tutorials. *
- */
 public class Quickstart {
 
     /**
@@ -57,7 +42,6 @@ public class Quickstart {
     public static void main(String[] args) throws Exception {
         // display a data store file chooser dialog for shapefiles
         String filename = "../tutorial/maps/WB_countries_Admin0_10m.shp";
-
         FileLoader loader = new FileLoader(filename);
 
         FileDataStore store = FileDataStoreFinder.getDataStore(loader.loadFile());
@@ -110,15 +94,11 @@ public class Quickstart {
                 collection.add(feature);
                 for (int i = 0; i < multipolygon.getNumGeometries(); i++) {
                     Polygon polygon = (Polygon) multipolygon.getGeometryN(i);
-                    // for i in polygon
-                    //
-
                     featureBuilder.add(gb.box(polygon.getEnvelopeInternal().getMinX(),
                             polygon.getEnvelopeInternal().getMinY(),
                             polygon.getEnvelopeInternal().getMaxX(),
                             polygon.getEnvelopeInternal().getMaxY()));
                     collection.add(featureBuilder.buildFeature(null));
-
                 }
                 if (multipolygon != null && multipolygon.contains(p)) {
                     target = feature;

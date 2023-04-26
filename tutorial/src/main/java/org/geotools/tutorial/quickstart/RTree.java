@@ -1,5 +1,5 @@
 /*
- * Project : 
+ * Project for the course of INFO-F203 : R-Trees
  * Date: Thursday, March 30th 2023, 12:09:05 pm
  * Author: Moïra Vanderslagmolen & Andrius Ezerskis
  */
@@ -27,6 +27,14 @@ abstract class RTree {
     public MBRNode root = new MBRNode("root");
     private static int N;
 
+    /**
+     * Crée le RTree
+     * 
+     * @param file          Objet File
+     * @param valueProperty Attribut de la propriété à récupérer
+     * @param _N            Le nombre d'enfants maximum pour un node
+     * @throws IOException
+     */
     RTree(File file, String valueProperty, int _N) throws IOException {
         N = _N;
         FileDataStore store = FileDataStoreFinder.getDataStore(file);
@@ -44,12 +52,7 @@ abstract class RTree {
                     if (polygon != null && root != null) {
                         String label = feature.getProperty(valueProperty).getValue().toString();
                         MBRNode nodeToAdd = new MBRNode(label, polygon);
-                        try {
-                            addLeaf(root, nodeToAdd);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            System.exit(0);
-                        }
+                        addLeaf(root, nodeToAdd);
                     }
                 }
             }
@@ -58,12 +61,13 @@ abstract class RTree {
     }
 
     /**
+     * Recherche d'un point parmi le R-Tree
      * 
      * @param node
      * @param point
      * @return
      */
-    public MBRNode search(MBRNode node, Point point) { // appeller cette fonction avec la racine de l'arbre
+    public MBRNode search(MBRNode node, Point point) {
         if (node.subnodes.size() == 0) { // si c'est une feuille
             if (node.MBR.contains(point.getX(), point.getY())) {
                 if (node.polygon.contains(point)) {
@@ -83,8 +87,15 @@ abstract class RTree {
         return null;
     }
 
-    public void pickNext(MBRNode splitSeed1, MBRNode splitSeed2, ArrayList<MBRNode> copiedSubnodes) {
-        for (MBRNode subnode : copiedSubnodes) {
+    /**
+     * Associe chaque noeud à la meilleure des deux seed
+     * 
+     * @param splitSeed1
+     * @param splitSeed2
+     * @param subnodes
+     */
+    public void pickNext(MBRNode splitSeed1, MBRNode splitSeed2, ArrayList<MBRNode> subnodes) {
+        for (MBRNode subnode : subnodes) {
             if (subnode.MBR == splitSeed1.MBR) {
                 splitSeed1.subnodes.add(subnode);
                 subnode.parent = splitSeed1;
@@ -114,21 +125,26 @@ abstract class RTree {
 
     }
 
-    public Boolean expandMBR(MBRNode node, Envelope MBR) {
+    /**
+     * Augmente le MBR du noeud "node" pour inclure l'enveloppe "MBR"
+     * 
+     * @param node
+     * @param MBR
+     */
+    public void expandMBR(MBRNode node, Envelope MBR) {
         node.MBR.expandToInclude(MBR);
-        while (node.label != "root") {
-            return expandMBR(node.parent, MBR);
+        if (node.label != "root") {
+            expandMBR(node.parent, MBR);
         }
-        return true;
     }
 
     /**
+     * Split un node en choisissant deux seeds parmi ses enfants. Associe le restant
+     * des enfants aux meilleures seeds.
      * 
-     * @param node
-     * @return
-     * @throws Exception
+     * @param node le node à split
      */
-    public MBRNode split(MBRNode node) throws Exception {
+    public void split(MBRNode node) {
         ArrayList<MBRNode> splitSeeds = pickSeeds(node);
         if (splitSeeds != null) {
             pickNext(splitSeeds.get(0), splitSeeds.get(1), node.subnodes);
@@ -138,15 +154,22 @@ abstract class RTree {
             node.subnodes.add(splitSeeds.get(0));
             node.subnodes.add(splitSeeds.get(1));
         }
-        return node;
     }
 
-    public void addLeaf(MBRNode n, MBRNode nodeToAdd) throws Exception {
-        if (n.subnodes.size() == 0 || n.subnodes.get(0).subnodes.size() == 0) { // if bottom level is reached -> create
-            n.subnodes.add(nodeToAdd); // create leaf
+    /**
+     * Ajoute une nouvelle feuille dans le R-Tree. Si le nombre d'enfants de "n"
+     * dépasse une certaine constante "N", la méthode split est appelée.
+     * 
+     * @param n
+     * @param nodeToAdd
+     * @throws Exception
+     */
+    public void addLeaf(MBRNode n, MBRNode nodeToAdd) {
+        if (n.subnodes.size() == 0 || n.subnodes.get(0).subnodes.size() == 0) {
+            n.subnodes.add(nodeToAdd);
             nodeToAdd.parent = n;
             expandMBR(n, nodeToAdd.MBR);
-        } else { // still need to go deeper
+        } else {
             n = chooseNode(root, nodeToAdd);
             addLeaf(n, nodeToAdd);
         }
@@ -156,9 +179,12 @@ abstract class RTree {
     }
 
     /**
-     * @param node
-     * @param polygon
-     * @return MBRNode
+     * Choisi le meilleur noeud, soit le noeud pour lequel l'expansion de son MBR
+     * par le MBR du "nodeToAdd" est la plus petite.
+     * 
+     * @param bestNode
+     * @param nodeToAdd
+     * @return
      */
     public MBRNode chooseNode(MBRNode bestNode, MBRNode nodeToAdd) {
         if (bestNode.subnodes.isEmpty() || bestNode.subnodes.get(0).subnodes.isEmpty()) {
@@ -184,18 +210,10 @@ abstract class RTree {
     }
 
     /**
-     * trouver l'entrée dont le rectangle a
-     * le côté bas le plus élevé, et celui
-     * avec le côté haut le plus bas Enregistrez la séparation.
+     * Méthode qui choisi les meilleurs seeds
      * 
-     * Normalize the separations
-     * by dividing by the width of the entire
-     * set
-     * 
-     * Choisir la pair avec la plus grande normalized séparation
-     * 
-     * @return
-     * @throws Exception
+     * @param node
+     * @return Les deux seeds choisies
      */
-    abstract ArrayList<MBRNode> pickSeeds(MBRNode node) throws Exception;
+    abstract ArrayList<MBRNode> pickSeeds(MBRNode node);
 }

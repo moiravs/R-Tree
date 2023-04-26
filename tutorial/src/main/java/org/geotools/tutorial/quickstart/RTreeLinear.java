@@ -1,42 +1,37 @@
+/*
+ * Project for the course of INFO-F203 : R-Trees
+ * Date: Thursday, March 30th 2023, 12:09:05 pm
+ * Author: Moïra Vanderslagmolen & Andrius Ezerskis
+ */
 package org.geotools.tutorial.quickstart;
 
 import org.locationtech.jts.geom.Envelope;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class RTreeLinear extends RTree {
 
-    public RTreeLinear(File file, String valueProperty, int N) throws IOException {
+    public RTreeLinear(File file, String valueProperty, int N) {
         super(file, valueProperty, N);
     }
 
     /**
-     * trouver l'entrée dont le rectangle a
-     * le côté bas le plus élevé, et celui
-     * avec le côté haut le plus bas Enregistrez la séparation.
+     * Choisi les deux meilleures seeds parmi les enfants du paramètre node.
      * 
-     * Normalize the separations
-     * by dividing by the width of the entire
-     * set
-     * 
-     * Choisir la pair avec la plus grande normalized séparation
-     * 
-     * @return
-     * @throws Exception
+     * @param node
+     * @return Les deux seeds choisies
      */
-    public ArrayList<MBRNode> pickSeeds(MBRNode node) throws Exception {
-        double bestMaxX = Double.POSITIVE_INFINITY; // + petit possible
-        double bestMinX = Double.NEGATIVE_INFINITY; // + grand possible
-        double bestMaxY = Double.POSITIVE_INFINITY; // + petit possible
-        double bestMinY = Double.NEGATIVE_INFINITY; // + grand possible
+    public ArrayList<MBRNode> pickSeeds(MBRNode node) {
+        double bestMaxX = Double.POSITIVE_INFINITY;
+        double bestMinX = Double.NEGATIVE_INFINITY;
+        double bestMaxY = Double.POSITIVE_INFINITY;
+        double bestMinY = Double.NEGATIVE_INFINITY;
         Envelope MBRBestMaxX = new Envelope();
         Envelope MBRBestMinX = new Envelope();
         Envelope MBRBestMaxY = new Envelope();
         Envelope MBRBestMinY = new Envelope();
 
-        // getMaxX doit être le + petit possible pr rect1
-        // getMinX doit être le + grand possible pr rect2
         for (MBRNode seed : node.subnodes) {
             if (seed.MBR.getMaxX() < bestMaxX) {
                 bestMaxX = seed.MBR.getMaxX();
@@ -57,7 +52,7 @@ public class RTreeLinear extends RTree {
             }
         }
 
-        // normalize
+        // normalisation
         ArrayList<MBRNode> foundSeeds = new ArrayList<MBRNode>();
         if (MBRBestMinY == MBRBestMaxY && MBRBestMaxX == MBRBestMinX) {
             return null;
