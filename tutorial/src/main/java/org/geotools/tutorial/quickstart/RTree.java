@@ -64,10 +64,10 @@ abstract class RTree {
      * 
      * @param node
      * @param point
-     * @return
+     * @return le node trouvé
      */
     public MBRNode search(MBRNode node, Point point) {
-        if (node.subnodes.size() == 0) { // si c'est une feuille
+        if (node.subnodes.size() == 0) {
             if (node.MBR.contains(point.getX(), point.getY())) {
                 if (node.polygon.contains(point)) {
                     return node;
