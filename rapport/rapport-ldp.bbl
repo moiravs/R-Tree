@@ -1,0 +1,13 @@
+\begin{thebibliography}{}
+
+\bibitem[Al-Badarneh et~al., 2010]{doi:10.1177/0165551509340360}
+Al-Badarneh, A.~F., Yaseen, Q., and Hmeidi, I. (2010).
+\newblock A new enhancement to the r-tree node splitting.
+\newblock {\em Journal of Information Science}, 36(1):3--18.
+
+\bibitem[Guttman, 1984]{inproceedings}
+Guttman, A. (1984).
+\newblock R trees: A dynamic index structure for spatial searching.
+\newblock volume~14, pages 47--57.
+
+\end{thebibliography}

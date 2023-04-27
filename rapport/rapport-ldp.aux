@@ -2,10 +2,13 @@
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
 \HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
 \global\let\oldnewlabel\newlabel
 \gdef\newlabel#1#2{\newlabelxx{#1}#2}
 \gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
 \AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
 \let\newlabel\oldnewlabel
 \fi}
 \fi}
@@ -13,7 +16,6 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\citation{*}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}{section.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Structure du code}{2}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}MBRNode}{2}{subsection.2.1}\protected@file@percent }
@@ -35,25 +37,29 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}FileLoader}{4}{subsection.2.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3}Optimisations}{4}{section.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Multi-polygones}{4}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Split}{4}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}PickSeeds quadratique}{4}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Nombre d'enfants maximum}{5}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}PickSeeds quadratique}{4}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Nombre d'enfants maximum}{4}{subsection.3.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4}Expérience sur données réelles}{5}{section.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Présentation des tests}{5}{subsection.4.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Présentation des cartes}{5}{subsection.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Résultats des tests}{6}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Résultats des tests}{5}{subsection.4.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Analyse des tests}{6}{subsection.4.4}\protected@file@percent }
 \newlabel{Analyse des tests}{{4.4}{6}{Analyse des tests}{subsection.4.4}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Optimisation}{6}{subsubsection.4.4.1}\protected@file@percent }
+\citation{*}
+\bibstyle{apalike}
+\bibdata{myBib.bib}
+\bibcite{doi:10.1177/0165551509340360}{Al-Badarneh et\nobreakspace  {}al., 2010}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Influence du N}{7}{subsubsection.4.4.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.3}Algorithme linéaire vs Algorithme quadratique}{7}{subsubsection.4.4.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{7}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Bibliographie}{7}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Annexes}{7}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Annexes}{7}{section.6}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Before optimization}}{7}{figure.1}\protected@file@percent }
 \newlabel{Figure 1}{{1}{7}{Before optimization}{figure.1}{}}
 \newlabel{fig:beforeopti}{{1}{7}{Before optimization}{figure.1}{}}
+\bibcite{inproceedings}{Guttman, 1984}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces After optimization}}{8}{figure.2}\protected@file@percent }
 \newlabel{Figure 2}{{2}{8}{After optimization}{figure.2}{}}
 \newlabel{fig:afteropti}{{2}{8}{After optimization}{figure.2}{}}
+\@writefile{toc}{\contentsline {section}{\hbox to\@tempdima {\hfil }References}{8}{section*.2}\protected@file@percent }
 \gdef \@abspage@last{9}
