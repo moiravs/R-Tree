@@ -103,38 +103,41 @@
   La méthode chooseNode prend en paramètre le bestNode et le noeud à ajouter.
   Si le bestNode n'a pas d'enfants ou si son premier enfant n'a pas d'enfants,
   alors le bestNode est renvoyé. Sinon, nous itérons à travers les enfants de
-  bestNode. Le noeud dont le MBR augmente le moins avec le noeud à ajouter est
-  choisi. Nous appelons ensuite récursivement la méthode chooseNode.
+  bestNode. Nous choissisons le noeud qui minimise l'aire de l'union de ce noeud avec le noeud à ajouter. Nous appelons ensuite récursivement la méthode chooseNode.
 
   \par
   \subsubsection{search}
   \indent
   \par
-
+  La fonction search commence à partir de la racine.
 
   \par
   \subsection{RTreeLinear et RTreeQuadratic}\label{RTreeLinear}
   \indent
   \par
   RTreeLinear représente l'implémentation du R-Tree avec l'algorithme de split
-  linéaire, dont on reparle dans la section PickSeedsLinear. RTreeQuadratic
-  représente donc le R-Tree avec l'algorithme de split quadratique.
+  linéaire et RTreeQuadratic représente le R-Tree avec l'algorithme de split quadratique.
   \par
 
   \subsubsection{PickSeeds quadratique}\label{PickSeeds quadratique}
-  \indent
   \par
+  \indent
   Le pickSeeds quadratique cherche les deux seeds qui maximisent l'aire de l'enveloppe qui les entoure.
-  \newline Pour ce faire, nous itérons à travers tous les sous-noeuds du noeud donné en paramètre,
+  \par
+  \indent
+  Pour ce faire, nous itérons à travers tous les sous-noeuds du noeud donné en paramètre,
   et nous calculons la différence d'aire entre l'union de deux sous-noeuds consécutifs et l'aire de
-  ces derniers séparement (enveloppe(les 2 sous-noeuds) - enveloppe(premier sous-noeud) - enveloppe(deuxième sous-noeud)).
-  \newline Le pickSeeds retourne donc un vecteur contenant les deux seeds choisies.
+  ces derniers séparement.
+  \par
+  \par
+  \indent
+  Le pickSeeds retourne donc un vecteur contenant les deux seeds choisies.
   \par
   \subsubsection{PickSeeds linéaire}\label{PickSeeds lineaire}
   \indent
   \par
   Le pickSeeds linéaire commence par itérer dans chaque sous-noeud du noeud
-  qu'on veut split. Ensuite, nous choisissons le noeud dont le côté droit du MBR
+  que nous voulons split. Ensuite, nous choisissons le noeud dont le côté droit du MBR
   associé a le plus petit x, le noeud dont le côté gauche du MBR a le plus grand
   x. Nous faisons de même avec la dimension y. Par après, nous testons si les
   nodes sont tous les mêmes, ou si les noeuds d'une dimension sont les mêmes.
@@ -148,7 +151,7 @@
   \par
   Si les noeuds sont tous différents, nous calculons la normalisation, qui
   correspond au ratio entre les côtés internes et les côtés externes pour chaque
-  dimension(dans ce projet-ci, la dimension x et y). Nous prenons ensuite la
+  dimension (dans ce projet-ci, la dimension x et y). Nous prenons ensuite la
   normalisation la plus élevée.
   \par
 
@@ -165,11 +168,11 @@
   \par
   Notre première optimisation se base sur les multi-polygones. En effet, comme
   expliqué dans les consignes du projet d'algorithmique, nous avons remarqué que
-  des polygones très étendu comme la france (voir annexe, mettre un label)
+  des polygones très étendu comme la france (voir \nameref{Figure 1})
   prenaient énormément de place. Nous avons donc décidé de séparer les
-  multi-polygones en polygones et ça a donné (figure aprèsopti). Cela nous a
+  multi-polygones en polygones (voir \nameref{Figure 2}). Cela nous a
   permis de gagner quelques secondes lors des tests dont nous parlerons au
-  chapitre 'Analyse des tests'.
+  chapitre \nameref{Analyse des tests}.
 
   \subsection{Split}
   \indent
@@ -205,10 +208,10 @@
   \subsection{N}
   \indent
   \par
-  Au début, nous avions N, le truc maximum pr les RTree en attribut de la classe RTree et défini là dedans.
-  Pour optimiser notre programme, nous avons décidé de le passer en paramètre.
-  Grâce à cette amélioration, les 8 tests que nous avons fait tourner ont pris
-  4,429 secondes au total au lieu de 5,865 secondes.
+  Au début, nous avions N, le truc maximum pr les RTree en attribut de la classe
+  RTree et défini là dedans. Pour optimiser notre programme, nous avons décidé
+  de le passer en paramètre. Grâce à cette amélioration, les 8 tests que nous
+  avons fait tourner ont pris 4,429 secondes au total au lieu de 5,865 secondes.
 
 
   \section{Expérience sur données réelles}
@@ -290,7 +293,7 @@
 
 
 
-  \subsection{Analyse des données}
+  \subsection{Analyse des tests}\label{Analyse des tests}
   \subsubsection{Optimisation}
   \par
   \indent
@@ -328,12 +331,12 @@
 
   \section{Annexes}
   \begin{figure}[h]
-    \caption{Before optimization}
+    \caption{Before optimization}\label{Figure 1}
     \includegraphics[width=\textwidth]{beforeopti.png}\label{fig:beforeopti}
   \end{figure}
 
   \begin{figure}[h]
-    \caption{After optimization}
+    \caption{After optimization}\label{Figure 2}
     \includegraphics[width=\textwidth]{afterOpti.png}\label{fig:afteropti}
   \end{figure}
 

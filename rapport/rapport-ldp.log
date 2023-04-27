@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.11)  27 APR 2023 21:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Arch Linux) (preloaded format=pdflatex 2023.4.11)  27 APR 2023 21:56
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -370,45 +370,45 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has b
                    \relax 
 l.32 \newpage
               [1] [2] [3] [4]
-Overfull \hbox (13.37663pt too wide) in paragraph at lines 247--248
+Overfull \hbox (13.37663pt too wide) in paragraph at lines 250--251
 []\OT1/cmr/m/n/12 Temps en mil-lisec-on-des de la fonc-tion search en fonc-tion des diff^^Serents tests et valeurs. 
  []
 
 [5] [6]
-Overfull \hbox (13.4784pt too wide) in paragraph at lines 308--320
+Overfull \hbox (13.4784pt too wide) in paragraph at lines 311--323
 \OT1/cmr/m/n/12 un point dans un poly-gone. En moyenne, la recherche prend 39,9 mil-lisec-on-des pour l'algorithme
  []
 
-<beforeopti.png, id=198, 2107.875pt x 846.16125pt>
+<beforeopti.png, id=203, 2107.875pt x 846.16125pt>
 File: beforeopti.png Graphic file (type png)
 <use beforeopti.png>
-Package pdftex.def Info: beforeopti.png  used on input line 332.
+Package pdftex.def Info: beforeopti.png  used on input line 335.
 (pdftex.def)             Requested size: 469.75502pt x 188.57048pt.
-<afterOpti.png, id=199, 1382.16376pt x 560.8453pt>
+<afterOpti.png, id=204, 1382.16376pt x 560.8453pt>
 File: afterOpti.png Graphic file (type png)
 <use afterOpti.png>
-Package pdftex.def Info: afterOpti.png  used on input line 337.
+Package pdftex.def Info: afterOpti.png  used on input line 340.
 (pdftex.def)             Requested size: 469.75502pt x 190.60785pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [7 <./beforeopti.png (PNG copy)>] [8 <./afterOpti.png (PNG copy)>] (./rapport-ldp.aux)
 Package rerunfilecheck Info: File `rapport-ldp.out' has not changed.
-(rerunfilecheck)             Checksum: A00E279F7FA71D28C38FBCD22966576B;3786.
+(rerunfilecheck)             Checksum: 09DD256A81322EA8B675C5E5BB8690B9;3773.
  ) 
 Here is how much of TeX's memory you used:
- 12113 strings out of 476025
- 190051 string characters out of 5796532
+ 12116 strings out of 476025
+ 190090 string characters out of 5796532
  1879388 words of memory out of 5000000
- 32337 multiletter control sequences out of 15000+600000
+ 32340 multiletter control sequences out of 15000+600000
  520150 words of font info for 63 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  72i,8n,77p,597b,553s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on rapport-ldp.pdf (9 pages, 252511 bytes).
+Output written on rapport-ldp.pdf (9 pages, 252611 bytes).
 PDF statistics:
- 249 PDF objects out of 1000 (max. 8388607)
- 223 compressed objects within 3 object streams
+ 252 PDF objects out of 1000 (max. 8388607)
+ 226 compressed objects within 3 object streams
  55 named destinations out of 1000 (max. 500000)
  235 words of extra memory for PDF output out of 10000 (max. 10000000)
 
