@@ -20,7 +20,7 @@ public class Quickstart {
 
     public static void main(String[] args) throws Exception {
         // display a data store file chooser dialog for shapefiles
-        String filename = "../tutorial/maps/WB_countries_Admin0_10m.shp";
+        String filename = "../tutorial/maps/lt_1km.shp";
         FileLoader loader = new FileLoader(filename);
 
         FileDataStore store = FileDataStoreFinder.getDataStore(loader.loadFile());
@@ -34,7 +34,7 @@ public class Quickstart {
                 r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
 
         // Créer le R-Tree
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "NAME_FR", 4);
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "ADM1_EN", 4);
         long startTimeGlobal = System.currentTimeMillis();
 
         // Rechercher le point dans le R-Tree
