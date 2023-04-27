@@ -33,10 +33,6 @@
 \begin{large}
 
 
-
-  dire quelles librairies on a utilisé
-
-
   \section{Introduction}
   \indent
   \par
@@ -68,7 +64,7 @@
   chooseNode et addLeaf.
   \par
 
-  \subsubsection{addLeaf}\label{addLeaf}
+  \subsubsection{AddLeaf}\label{addLeaf}
   \indent
   \par
   Lorsque nous voulons ajouter un nouveau node, la méthode addLeaf() est appelée
@@ -84,7 +80,7 @@
   Si le nombre d'enfants du node passé en paramètre dépasse un nombre N, alors
   un split est effectué.
   \par
-  \subsubsection{split}\label{split}
+  \subsubsection{Split}\label{split}
   \indent
   \par
   L'algorithme de split commence par appeler le pickSeeds quadratique ou
@@ -97,7 +93,7 @@
   a été divisé.
   \par
 
-  \subsubsection{chooseNode}\label{chooseNode}
+  \subsubsection{ChooseNode}\label{chooseNode}
   \indent
   \par
   La méthode chooseNode prend en paramètre le bestNode et le noeud à ajouter.
@@ -106,15 +102,20 @@
   bestNode. Nous choissisons le noeud qui minimise l'aire de l'union de ce noeud avec le noeud à ajouter. Nous appelons ensuite récursivement la méthode chooseNode.
 
   \par
-  \subsubsection{search}
-  \indent
+  \subsubsection{Search}
   \par
-  La fonction search commence à partir de la racine.
+  \indent
+  La fonction search commence à partir de la racine. Si la racine n'a pas
+  d'enfants, si le MBR de la racine et si le polygone de la racine contiennent
+  le point, alors la racine est retournée. Sinon, si la racine a des enfants et
+  si son MBR contient le point cherché, alors nous itérons dans les enfants et
+  appelons la méthode search sur chaque enfant.
 
   \par
   \subsection{RTreeLinear et RTreeQuadratic}\label{RTreeLinear}
-  \indent
   \par
+  \indent
+
   RTreeLinear représente l'implémentation du R-Tree avec l'algorithme de split
   linéaire et RTreeQuadratic représente le R-Tree avec l'algorithme de split quadratique.
   \par
@@ -205,13 +206,14 @@
   manière, nous commençons avec le noeud A et calculons avec le noeud B et tous
   les autres noeuds restants, puis le noeud B avec le noeud C et ainsi de suite. Cela nous permet de réduire le temps d'exécution.
 
-  \subsection{N}
+  \subsection{Nombre d'enfants maximum}
   \indent
   \par
-  Au début, nous avions N, le truc maximum pr les RTree en attribut de la classe
-  RTree et défini là dedans. Pour optimiser notre programme, nous avons décidé
-  de le passer en paramètre. Grâce à cette amélioration, les 8 tests que nous
-  avons fait tourner ont pris 4,429 secondes au total au lieu de 5,865 secondes.
+  Au début, nous avions N (le nombre d'enfants maximum pour les RTree) en
+  attribut de la classe RTree. Afin d'optimiser notre programme, nous avons
+  décidé de le passer en paramètre. Grâce à cette amélioration, les 8 tests que
+  nous avons fait tourner ont pris 4,429 secondes au total au lieu de 5,865
+  secondes.
 
 
   \section{Expérience sur données réelles}
@@ -233,9 +235,10 @@
 
   \subsection{Présentation des cartes}
   \begin{enumerate}
-    \item Carte de la belgique : 19795 polygones
-    \item Carte du monde : 251 polygones
-    \item Carte de la france : 18 polygones
+    \item Carte de la belgique: 19795 polygones
+    \item Carte du monde: 251 polygones
+    \item Carte de la france: 18 polygones
+    \item Carte du japon: 1892 polygones
   \end{enumerate}
 
   \indent
@@ -303,28 +306,39 @@
   devraient être les plus rapides, car ils contiennent le moins de polygones, et
   les algorithmes sont quadratiques et linéaire. Nous avons compris que le
   problème venait du fait que les multi-polygones prenait énormément de place et nous avons refait les tests
+  \par
   \subsubsection{Influence du N}
-  Nous remarquons aussi que le
-  nombre N n'a pas d'influence sur la rapidité de notre algorithme.
+  \par
+  \indent
+  Nous remarquons aussi que le nombre N(nombre maximum d'enfants) n'a pas
+  d'influence notable sur la rapidité de notre algorithme.
+  \par
   \subsubsection{Algorithme linéaire vs Algorithme quadratique}
   \par
   \indent
   Nous avons aussi remarqué que l'algorithme linéaire prend beaucoup plus de temps
   à chercher un point dans un polygone. En moyenne, la recherche prend 39,9
   millisecondes pour l'algorithme linéaire et 13,25 millisecondes pour
-  l'algorithme quadratique. Nous avons donc comparé les temps d'exécution. En
-  moyenne, le temps d'exécution sur 6 tests pour l'algorithme quadratique est de
-  6,357 secondes. Le temps d'exécution sur les mêmes tests pour l'algorithme
-  linéaire est de 3,087 secondes. La création de l'arbre est donc beaucoup plus
-  rapide pour l'algorithme linéaire que pour le quadratique, ce qui est attendu vu
-  la complexité de chaque algorithme. Cependant, il est intéressant de noter que
-  la fonction de recherche prend beaucoup plus de temps dans l'algorithme
-  linéaire.
+  l'algorithme quadratique.
+  \par
+  \indent
+  \par
+  Nous avons donc comparé les temps d'exécution. En moyenne, le temps
+  d'exécution sur 6 tests pour l'algorithme quadratique est de 6,357 secondes.
+  Le temps d'exécution sur les mêmes tests pour l'algorithme linéaire est de
+  3,087 secondes. La création de l'arbre est donc beaucoup plus rapide pour
+  l'algorithme linéaire que pour le quadratique, ce qui est attendu vu la
+  complexité de chaque algorithme. Cependant, il est intéressant de noter que la
+  fonction de recherche prend beaucoup plus de temps dans l'algorithme linéaire.
   \par
 
   \section{Conclusion}
-  \indent
   \par
+  \indent
+  En conclusion, nous avons remarqué une différence notable de la fonction
+  search entre l'algorithme linéaire et quadratique, l'algorithme quadratique
+  étant beaucoup plus rapide. Cependant pour la création du R-Tree, l'algorithme
+  linéaire est bien plus rapide.
   \par
 
   \section{Bibliographie}
