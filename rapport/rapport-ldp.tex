@@ -31,15 +31,7 @@
 \tableofcontents
 \newpage
 \begin{large}
-  Le Tableau x reprend les temps d’exé-
-  cution, exprimés en micro-secondes CPU,
-  sur les différents ensembles de données.
-  Ces tests ont été effectués sur une machine
-  ayant les caractéristiques suivantes : Dell
-  Dual Core, 2.66 GHz, 2 Gb RAM, système
-  SuSE Linux 10.0 (kernel 2.4.2), java 1.5.0,
-  etc. Pour calculer le temps CPU, la classe
-  ThreadMXBean a été utilisée
+
 
 
   dire quelles librairies on a utilisé
@@ -49,54 +41,54 @@
   \indent
   \par
   Ce rapport se divise en plusieurs parties. Tout d'abord, nous expliquons la
-  structure de notre code.
-
+  structure de notre code en expliquant le rôle de chaque classe et leurs
+  méthodes associées. Ensuite, nous parlerons des optimisations effectuées afin
+  d'améliorer la vitesse de nos algorithmes. Enfin, nous analyserons les tests
+  réalisés dans le cadre de ce projet et les influences des différentes
+  optimisations sur le temps d'exécution.
   \par
   \section{Structure du code}
 
   \par
   \subsection{MBRNode}
-  \par
   \indent
+  \par
   MBRNode représente les noeuds des R-Tree. Elle contient un label, un Minimum Bouding Rectangle(MBR),un polygone,
   des enfants (sauf si c'est une feuille) et un parent (sauf si c'est la racine de
   l'arbre). Si le noeud n'est pas une feuille, alors son label sera `SplitSeed',
-  car il contient l'union de tous les MBR de ses enfants.
-
-
-
-  \subsection{RTree}
+  et son MBR contiendra l'union de tous les MBR de ses enfants.
   \par
+
+  \subsection{RTree}\label{RTree}
   \indent
+  \par
   RTree est une classe abstraite. Elle permet de regrouper ensemble les méthodes
   communes à RTreeLinear et RTreeQuadratic, par exemple la recherche d'un noeud
   (searchNode), l'initialisation de la classe, les méthodes split, pickNext,
   chooseNode et addLeaf.
-
-
-
-
-  \subsubsection{addLeaf}
   \par
+
+  \subsubsection{addLeaf}\label{addLeaf}
   \indent
+  \par
   Lorsque nous voulons ajouter un nouveau node, la méthode addLeaf() est appelée
   avec la racine de l'arbre en paramètre. Si la racine de l'arbre n'a pas
-  d'enfants ou que son premier enfant n'a pas d'enfant, alors nous rajoutons le
-  nouveau node. Ensuite, nous augmentons le MBR du parent, ainsi que celui de
-  ses parents. Sinon, nous choisissons un noeud grâce à la méthode chooseNode et
-  puis la méthode addLeaf est de nouveau appelée, avec cette fois-ci le node
-  choisi par la méthode chooseNode.
+  d'enfants ou que son premier enfant n'a pas d'enfant, alors le nouveau node
+  est rajouté à la racine de l'arbre. Ensuite, nous augmentons le MBR du parent,
+  ainsi que celui de ses parents grâce à la méthode expandMBR(). Sinon, nous
+  choisissons un noeud grâce à la méthode \nameref{chooseNode} et puis la méthode \nameref{addLeaf}
+  est de nouveau appelée, avec cette fois-ci le node choisi par la méthode
+  \nameref{chooseNode}.
   \par
   \indent
   Si le nombre d'enfants du node passé en paramètre dépasse un nombre N, alors
   un split est effectué.
   \par
-  \subsubsection{split}
-  \par
+  \subsubsection{split}\label{split}
   \indent
+  \par
   L'algorithme de split commence par appeler le pickSeeds quadratique ou
-  linéaire afin d'obtenir deux noeuds qui, leurs aires sommées, prennent plus de
-  place que le Minimum Bounding Rectangle qui les entoure. \newline Ensuite, la
+  linéaire afin d'obtenir deux seeds. \newline Ensuite, la
   méthode pickNext s'assure de choisir, pour chaque sous-noeud, la seed dont le
   MBR augmente le moins avec ce sous-noeud, et le sous-noeud devient alors
   l'enfant de cette seed. \newline Pour finir, les deux splitSeeds obtenus via
@@ -105,9 +97,9 @@
   a été divisé.
   \par
 
-  \subsubsection{chooseNode}
-  \par
+  \subsubsection{chooseNode}\label{chooseNode}
   \indent
+  \par
   La méthode chooseNode prend en paramètre le bestNode et le noeud à ajouter.
   Si le bestNode n'a pas d'enfants ou si son premier enfant n'a pas d'enfants,
   alors le bestNode est renvoyé. Sinon, nous itérons à travers les enfants de
@@ -116,27 +108,31 @@
 
   \par
   \subsubsection{search}
-  \par
   \indent
+  \par
 
 
   \par
   \subsection{RTreeLinear et RTreeQuadratic}\label{RTreeLinear}
-  \par
   \indent
+  \par
   RTreeLinear représente l'implémentation du R-Tree avec l'algorithme de split
   linéaire, dont on reparle dans la section PickSeedsLinear. RTreeQuadratic
   représente donc le R-Tree avec l'algorithme de split quadratique.
+  \par
 
-  \subsubsection{PickSeeds quadratique}
+  \subsubsection{PickSeeds quadratique}\label{PickSeeds quadratique}
+  \indent
+  \par
   Le pickSeeds quadratique cherche les deux seeds qui maximisent l'aire de l'enveloppe qui les entoure.
-  \newline Pour ce faire, nous itérons à travers tous les sous-noeuds du noeud donné en paramètre, 
-  et nous calculons la différence d'aire entre l'union de deux sous-noeuds consécutifs et l'aire de 
+  \newline Pour ce faire, nous itérons à travers tous les sous-noeuds du noeud donné en paramètre,
+  et nous calculons la différence d'aire entre l'union de deux sous-noeuds consécutifs et l'aire de
   ces derniers séparement (enveloppe(les 2 sous-noeuds) - enveloppe(premier sous-noeud) - enveloppe(deuxième sous-noeud)).
   \newline Le pickSeeds retourne donc un vecteur contenant les deux seeds choisies.
-  \subsubsection{PickSeeds linéaire}
   \par
+  \subsubsection{PickSeeds linéaire}\label{PickSeeds lineaire}
   \indent
+  \par
   Le pickSeeds linéaire commence par itérer dans chaque sous-noeud du noeud
   qu'on veut split. Ensuite, nous choisissons le noeud dont le côté droit du MBR
   associé a le plus petit x, le noeud dont le côté gauche du MBR a le plus grand
@@ -149,6 +145,7 @@
   les mêmes.
   \par
   \indent
+  \par
   Si les noeuds sont tous différents, nous calculons la normalisation, qui
   correspond au ratio entre les côtés internes et les côtés externes pour chaque
   dimension(dans ce projet-ci, la dimension x et y). Nous prenons ensuite la
@@ -156,16 +153,16 @@
   \par
 
   \subsection{FileLoader}
-  \par
   \indent
+  \par
   Cette classe permet de charger le shapefile en mémoire. Nous avons implémenté
   cette classe afin de facilement changer la façon dont les fichiers sont chargés.
 
 
   \section{Optimisations}
   \subsection{Multi-polygones}
-  \par
   \indent
+  \par
   Notre première optimisation se base sur les multi-polygones. En effet, comme
   expliqué dans les consignes du projet d'algorithmique, nous avons remarqué que
   des polygones très étendu comme la france (voir annexe, mettre un label)
@@ -175,8 +172,9 @@
   chapitre 'Analyse des tests'.
 
   \subsection{Split}
-  \par
   \indent
+
+  \par
   Au début, nous copions l'entiereté du vecteur des enfants du node choisi pour
   split. Puis nous vidons ce vecteur et nous rajoutons les seeds choisies. Et puis
   seulement avec le vecteur copié nous ajoutions au fur et à mesure au seeds
@@ -191,8 +189,8 @@
   5,865 secondes au total au lieu de 6,778 secondes.
   \par
   \subsection{PickSeeds quadratique}
-  \par
   \indent
+  \par
   Dans le pickSeeds quadratique, nous itérons à travers le vecteur d'enfants du node à
   split et nous prenons les deux noeuds les plus éloignés. Nous avons vite
   remarqué qu'il n'était pas nécéssaire de faire un double for en itérant chaque
@@ -205,8 +203,8 @@
   les autres noeuds restants, puis le noeud B avec le noeud C et ainsi de suite. Cela nous permet de réduire le temps d'exécution.
 
   \subsection{N}
-  \par
   \indent
+  \par
   Au début, nous avions N, le truc maximum pr les RTree en attribut de la classe RTree et défini là dedans.
   Pour optimiser notre programme, nous avons décidé de le passer en paramètre.
   Grâce à cette amélioration, les 8 tests que nous avons fait tourner ont pris
@@ -237,12 +235,15 @@
     \item Carte de la france : 18 polygones
   \end{enumerate}
 
-
-
+  \indent
+  \par
+  Ces tests ont été effectués sur une machine Lenovo Yoga 7. La distribution
+  linux est KDE Neon 5.27 et la release ubuntu est la 22.04.
+  \indent
 
   \subsection{Résultats des tests}
-  \par
   \indent
+  \par
   Temps en millisecondes de la fonction search en fonction des différents tests et valeurs.
 
   \begin{tabular}{ |p{3cm}||p{3cm}|p{3cm}|p{3cm}|  }
