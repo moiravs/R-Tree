@@ -28,6 +28,7 @@ public class AppTest {
     String worldMap = "../tutorial/maps/WB_countries_Admin0_10m.shp";
     String belgiumMap = "../tutorial/maps/sh_statbel_statistical_sectors_31370_20220101.shp";
     String franceMap = "../tutorial/maps/regions-20180101.shp";
+    String japanMap = "../tutorial/maps/jpn_admbnda_adm2_2019.shp";
     long startTimeLocal;
     private static int i = 0;
     long endTimeLocal;
@@ -47,7 +48,7 @@ public class AppTest {
         System.out.println("Total execution time: " + (endTimeLocal - startTimeLocal));
     }
 
-    // 1er test - Carte de la belgique - Algorithme linéaire
+    // 1er test - Carte de la Belgique - Algorithme linéaire
     @Test
     public void TestA_assertPointIsInCampus() throws IOException {
         String filename = belgiumMap;
@@ -66,7 +67,7 @@ public class AppTest {
         assertTrue(node.label.equals("CAMPUS UNIVERSITAIRE"));
     }
 
-    // 2ème test - Carte de la belgique - Algorithme linéaire
+    // 2ème test - Carte de la Belgique - Algorithme linéaire
     @Test
     public void TestB_assertPointIsNull() throws IOException {
         String filename = belgiumMap;
@@ -124,7 +125,7 @@ public class AppTest {
         assertTrue(node.label.equals("Canada"));
     }
 
-    // 5ème test - Carte de la france - Algorithme linéaire
+    // 5ème test - Carte de la France - Algorithme linéaire
     @Test
     public void TestE_assertPointIsInAuvergne() throws IOException {
         String filename = franceMap;
@@ -143,7 +144,7 @@ public class AppTest {
         assertTrue(node.label.equals("fr:Auvergne-Rhône-Alpes"));
     }
 
-    // 6ème test - Carte de la france - Algorithme linéaire
+    // 6ème test - Carte de la France - Algorithme linéaire
     @Test
     public void TestF_assertPointIsInGuyane() throws IOException {
         String filename = franceMap;
@@ -162,7 +163,7 @@ public class AppTest {
         assertTrue(node.label.equals("fr:Guyane"));
     }
 
-    // 7ème test - Carte de la belgique - Algorithme quadratique
+    // 7ème test - Carte de la Belgique - Algorithme quadratique
     @Test
     public void TestG_assertPointIsInCampus() throws IOException {
         String filename = belgiumMap;
@@ -182,7 +183,7 @@ public class AppTest {
         assertTrue(node.label.equals("CAMPUS UNIVERSITAIRE"));
     }
 
-    // 8ème test - Carte de la belgique - Algorithme quadratique
+    // 8ème test - Carte de la Belgique - Algorithme quadratique
     @Test
     public void TestH_assertPointIsNotInAnyPolygon() throws IOException {
         String filename = belgiumMap;
@@ -239,7 +240,7 @@ public class AppTest {
         assertTrue(node.label.equals("Canada"));
     }
 
-    // 11ème test - Carte de la france - Algorithme linéaire
+    // 11ème test - Carte de la France - Algorithme quadratique
     @Test
     public void TestK_assertPointIsInAuvergne() throws IOException {
         String filename = franceMap;
@@ -259,7 +260,7 @@ public class AppTest {
 
     }
 
-    // 12ème test - Carte de la france - Algorithme linéaire
+    // 12ème test - Carte de la France - Algorithme quadratique
     @Test
     public void TestL_assertPointIsInGuyane() throws IOException {
         String filename = franceMap;
@@ -276,6 +277,25 @@ public class AppTest {
         else
             System.out.println("Point not in any polygon");
         assertTrue(node.label.equals("fr:Guyane"));
+    }
+
+    // 13ème test - Carte du Japon - Algorithme linéaire
+    @Test
+    public void TestM_assertPointIsInGifu() throws IOException {
+        String filename = japanMap;
+        FileLoader loader = new FileLoader(filename);
+        GeometryBuilder gb = new GeometryBuilder();
+        Point p = gb.point(137.36, 36.12);
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "ADM1_EN", N);
+        long startTimeGlobal = System.currentTimeMillis();
+        MBRNode node = rtree.search(rtree.root, p);
+        long endTimeGlobal = System.currentTimeMillis();
+        System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
+        if (node != null)
+            System.out.println(" node found = " + node.label);
+        else
+            System.out.println("Point not in any polygon");
+        assertTrue(node == null);
     }
 
 }
