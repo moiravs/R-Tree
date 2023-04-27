@@ -297,4 +297,23 @@ public class AppTest {
             System.out.println("Point not in any polygon");
         assertTrue(node.label.equals("JP21042")); // Gifu
     }
+
+    // 14ème test - Carte du Japon - Algorithme quadratique
+    @Test
+    public void TestN_assertPointIsInGifu() throws IOException {
+        String filename = japanMap;
+        FileLoader loader = new FileLoader(filename);
+        GeometryBuilder gb = new GeometryBuilder();
+        Point p = gb.point(137.36, 36.12);
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "ADM2_PCODE", N);
+        long startTimeGlobal = System.currentTimeMillis();
+        MBRNode node = rtree.search(rtree.root, p);
+        long endTimeGlobal = System.currentTimeMillis();
+        System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
+        if (node != null)
+            System.out.println(" node found =" + node.label);
+        else
+            System.out.println("Point not in any polygon");
+        assertTrue(node.label.equals("JP21042")); // Gifu
+    }
 }
