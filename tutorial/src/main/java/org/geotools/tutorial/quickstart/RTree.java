@@ -24,7 +24,7 @@ import org.geotools.data.simple.SimpleFeatureSource;
 import org.locationtech.jts.geom.MultiPolygon;
 
 abstract class RTree {
-    public MBRNode root = new MBRNode("root");
+    public MBRNode root = new MBRNode();
     private static int N;
 
     /**
@@ -35,7 +35,7 @@ abstract class RTree {
      * @param _N            Le nombre d'enfants maximum pour un node
      * @throws IOException File Error in geotools
      */
-    RTree(File file, String valueProperty, int _N) throws IOException {
+    RTree(File file, int _N) throws IOException {
         N = _N;
         FileDataStore store = FileDataStoreFinder.getDataStore(file);
         SimpleFeatureSource featureSource = store.getFeatureSource();
@@ -50,8 +50,7 @@ abstract class RTree {
                 Polygon polygon = (Polygon) multiPolygon.getGeometryN(i);
 
                 if (polygon != null && root != null) {
-                    String label = feature.getProperty(valueProperty).getValue().toString();
-                    MBRNode nodeToAdd = new MBRNode(label, polygon);
+                    MBRNode nodeToAdd = new MBRNode(polygon, feature);
                     addLeaf(root, nodeToAdd);
                 }
             }
@@ -132,7 +131,7 @@ abstract class RTree {
      */
     public void expandMBR(MBRNode node, Envelope MBR) {
         node.MBR.expandToInclude(MBR);
-        if (node.label != "root") {
+        if (node != root) {
             expandMBR(node.parent, MBR);
         }
     }
@@ -189,7 +188,7 @@ abstract class RTree {
         if (bestNode.subnodes.isEmpty() || bestNode.subnodes.get(0).subnodes.isEmpty()) {
             return bestNode;
         } else {
-            MBRNode bestChildNode = new MBRNode("SplitNode");
+            MBRNode bestChildNode = new MBRNode();
             double smallestEnlargementArea = Double.POSITIVE_INFINITY;
 
             for (MBRNode subnode : bestNode.subnodes) {
@@ -200,9 +199,6 @@ abstract class RTree {
                     smallestEnlargementArea = enlargementArea;
                     bestChildNode = subnode;
                 }
-            }
-            if (bestChildNode.label == "SplitNode") {
-                throw new RuntimeException();
             }
             return chooseNode(bestChildNode, nodeToAdd);
         }

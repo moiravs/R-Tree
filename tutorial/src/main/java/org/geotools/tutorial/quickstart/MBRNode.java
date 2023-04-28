@@ -9,13 +9,14 @@ import java.util.ArrayList;
 
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Polygon;
+import org.opengis.feature.simple.SimpleFeature;
 
 public class MBRNode {
   ArrayList<MBRNode> subnodes = new ArrayList<MBRNode>();
-  public String label;
   Envelope MBR;
   Polygon polygon;
   MBRNode parent;
+  public SimpleFeature feature;
 
   /**
    * Crée une copie d'un MBRNode
@@ -23,10 +24,16 @@ public class MBRNode {
    * @param node
    */
   public MBRNode(MBRNode node) {
-    this.label = node.label;
     this.MBR = node.MBR;
     this.polygon = node.polygon;
     this.parent = node.parent;
+    this.feature = node.feature;
+
+  }
+
+  public String getLabel(String name) {
+    String label = feature.getProperty(name).getValue().toString();
+    return label;
   }
 
   /**
@@ -36,7 +43,6 @@ public class MBRNode {
    */
   public MBRNode(Envelope MBR) {
     this.MBR = MBR;
-    this.label = "SplitSeed";
   }
 
   /**
@@ -45,10 +51,10 @@ public class MBRNode {
    * @param label
    * @param polygon
    */
-  public MBRNode(String label, Polygon polygon) {
-    this.label = label;
+  public MBRNode(Polygon polygon, SimpleFeature feature) {
     this.polygon = polygon;
     MBR = polygon.getEnvelopeInternal(); // crée le MinimumBoundingRectangle associé au polygone
+    this.feature = feature;
   }
 
   /**
@@ -56,24 +62,9 @@ public class MBRNode {
    * 
    * @param label
    */
-  public MBRNode(String label) {
+  public MBRNode() {
     subnodes = new ArrayList<MBRNode>();
-    this.label = label;
     MBR = new Envelope(0, 0, 0, 0);
   }
 
-  /**
-   * Affiche l'entièreté de l'arbre
-   * 
-   * @param level
-   */
-  public void print(int level) {
-    for (int i = 1; i < level; i++) {
-      System.out.print("\t");
-    }
-    System.out.println(this.label);
-    for (MBRNode child : this.subnodes) {
-      child.print(level + 1);
-    }
-  }
 }

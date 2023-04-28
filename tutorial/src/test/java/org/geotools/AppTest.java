@@ -32,7 +32,7 @@ public class AppTest {
     long startTimeLocal;
     private static int i = 0;
     long endTimeLocal;
-    private static final int N = 4;
+    private static final int N = 500;
 
     @Before
     public void timer() {
@@ -55,16 +55,16 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(152183, 167679);
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "T_SEC_FR", N);
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found =" + node.label + "end");
+            System.out.println(" node found =" + node.getLabel("T_SEC_FR") + "end");
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("CAMPUS UNIVERSITAIRE"));
+        assertTrue(node.getLabel("T_SEC_FR").equals("CAMPUS UNIVERSITAIRE"));
     }
 
     // 2ème test - Carte de la Belgique - Algorithme linéaire
@@ -74,13 +74,13 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(215113.0, 217404.0);
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "T_SEC_FR", N);
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found = " + node.label);
+            System.out.println(" node found = " + node.getLabel("T_SEC_FR"));
         else
             System.out.println("Point not in any polygon");
         assertTrue(node == null);
@@ -93,16 +93,16 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(73.0, 43.0);
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "NAME_FR", N);
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found = " + node.label);
+            System.out.println(" node found = " + node.getLabel("NAME_FR"));
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("Kazakhstan"));
+        assertTrue(node.getLabel("NAME_FR").equals("Kazakhstan"));
     }
 
     // 4ème test - Carte du monde - Algorithme linéaire
@@ -112,17 +112,16 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(-119.0, 56.0);
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "NAME_FR", N);
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
-        // rtree.root.print(1);
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found = " + node.label);
+            System.out.println(" node found = " + node.getLabel("NAME_FR"));
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("Canada"));
+        assertTrue(node.getLabel("NAME_FR").equals("Canada"));
     }
 
     // 5ème test - Carte de la France - Algorithme linéaire
@@ -132,16 +131,16 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(4.44, 44.85);
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "wikipedia", N);
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found = " + node.label);
+            System.out.println(" node found = " + node.getLabel("wikipedia"));
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("fr:Auvergne-Rhône-Alpes"));
+        assertTrue(node.getLabel("wikipedia").equals("fr:Auvergne-Rhône-Alpes"));
     }
 
     // 6ème test - Carte de la France - Algorithme linéaire
@@ -151,16 +150,16 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(-53.14, 4.14);
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "wikipedia", N);
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found = " + node.label);
+            System.out.println(" node found = " + node.getLabel("wikipedia"));
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("fr:Guyane"));
+        assertTrue(node.getLabel("wikipedia").equals("fr:Guyane"));
     }
 
     // 7ème test - Carte de la Belgique - Algorithme quadratique
@@ -171,16 +170,16 @@ public class AppTest {
         GeometryBuilder gb = new GeometryBuilder();
         // Point p = gb.point(-119.0, 56.0);
         Point p = gb.point(152183, 167679);
-        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "T_SEC_FR", N);
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found =" + node.label + "end");
+            System.out.println(" node found =" + node.getLabel("T_SEC_FR") + "end");
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("CAMPUS UNIVERSITAIRE"));
+        assertTrue(node.getLabel("T_SEC_FR").equals("CAMPUS UNIVERSITAIRE"));
     }
 
     // 8ème test - Carte de la Belgique - Algorithme quadratique
@@ -190,13 +189,13 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(215113.0, 217404.0);
-        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "T_SEC_FR", N);
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found = " + node.label);
+            System.out.println(" node found = " + node.getLabel("T_SEC_FR"));
         else
             System.out.println("Point not in any polygon");
         assertTrue(node == null);
@@ -209,16 +208,16 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(73.0, 43.0);
-        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "NAME_FR", N);
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found = " + node.label);
+            System.out.println(" node found = " + node.getLabel("NAME_FR"));
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("Kazakhstan"));
+        assertTrue(node.getLabel("NAME_FR").equals("Kazakhstan"));
     }
 
     // 10ème test - Carte du monde - Algorithme quadratique
@@ -228,16 +227,16 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(-119.0, 56.0);
-        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "NAME_FR", N);
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found = " + node.label);
+            System.out.println(" node found = " + node.getLabel("NAME_FR"));
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("Canada"));
+        assertTrue(node.getLabel("NAME_FR").equals("Canada"));
     }
 
     // 11ème test - Carte de la France - Algorithme quadratique
@@ -247,16 +246,16 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(4.44, 44.85);
-        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "wikipedia", N);
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found = " + node.label);
+            System.out.println(" node found = " + node.getLabel("wikipedia"));
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("fr:Auvergne-Rhône-Alpes"));
+        assertTrue(node.getLabel("wikipedia").equals("fr:Auvergne-Rhône-Alpes"));
 
     }
 
@@ -267,16 +266,16 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(-53.14, 4.14);
-        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "wikipedia", N);
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found = " + node.label);
+            System.out.println(" node found = " + node.getLabel("wikipedia"));
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("fr:Guyane"));
+        assertTrue(node.getLabel("wikipedia").equals("fr:Guyane"));
     }
 
     // 13ème test - Carte du Japon - Algorithme linéaire
@@ -286,16 +285,16 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(137.36, 36.12);
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "ADM2_PCODE", N);
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found =" + node.label);
+            System.out.println(" node found =" + node.getLabel("ADM2_PCODE"));
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("JP21042")); // Gifu
+        assertTrue(node.getLabel("ADM2_PCODE").equals("JP21042")); // Gifu
     }
 
     // 14ème test - Carte du Japon - Algorithme quadratique
@@ -305,15 +304,15 @@ public class AppTest {
         FileLoader loader = new FileLoader(filename);
         GeometryBuilder gb = new GeometryBuilder();
         Point p = gb.point(137.36, 36.12);
-        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), "ADM2_PCODE", N);
+        RTreeQuadratic rtree = new RTreeQuadratic(loader.loadFile(), N);
         long startTimeGlobal = System.currentTimeMillis();
         MBRNode node = rtree.search(rtree.root, p);
         long endTimeGlobal = System.currentTimeMillis();
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal) + " ms");
         if (node != null)
-            System.out.println(" node found =" + node.label);
+            System.out.println(" node found =" + node.getLabel("ADM2_PCODE"));
         else
             System.out.println("Point not in any polygon");
-        assertTrue(node.label.equals("JP21042")); // Gifu
+        assertTrue(node.getLabel("ADM2_PCODE").equals("JP21042")); // Gifu
     }
 }

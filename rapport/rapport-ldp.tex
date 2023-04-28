@@ -47,9 +47,9 @@
     \subsection{MBRNode}
     \indent
     \par
-    MBRNode représente les noeuds des R-Tree. Elle contient un label, un Minimum Bouding Rectangle(MBR),un polygone,
+    MBRNode représente les noeuds des R-Tree. Elle contient une "feature", un Minimum Bouding Rectangle(MBR),un polygone,
     des enfants (sauf si c'est une feuille) et un parent (sauf si c'est la racine de
-    l'arbre). Si le noeud n'est pas une feuille, alors son label sera `SplitSeed',
+    l'arbre). Si le noeud n'est pas une feuille, alors il n'aura pas de feature,
     et son MBR contiendra l'union de tous les MBR de ses enfants.
     \par
 
@@ -214,8 +214,8 @@
         \item Carte du monde - Algorithme quadratique - Canada
         \item Carte de la france - Algorithme quadratique - Auvergne
         \item Carte de la france - Algorithme quadratique - Guyane
-        \item Carte du japon - Algorithme quadratique - Gifu
-        \item Carte du japon - Algorithme quadratique - Gifu
+        \item Carte du japon - Algorithme linéaire - JP21042
+        \item Carte du japon - Algorithme quadratique - JP21042
     \end{enumerate}
 
     \subsection{Présentation des cartes}
@@ -255,8 +255,8 @@
         Test10 & 29  & 76      & 73                                        \\
         Test11 & 29  & 37      & -                                         \\
         Test12 & 2   & 2       & -                                         \\
-        Test13 & 2   & 2       & -                                         \\
-        Test14 & 2   & 2       & -                                         \\
+        Test13 & 2   & 3       & 2                                         \\
+        Test14 & 1   & 1       & 1                                         \\
 
         \hline
     \end{tabular}
@@ -279,8 +279,8 @@
         Test10 & 5   & 5       & 6                                                             \\
         Test11 & 29  & 19      & -                                                             \\
         Test12 & 2   & 2       & -                                                             \\
-        Test13 & 2   & 1       & 1                                                             \\
-        Test14 & 2   & 1       & 1                                                             \\
+        Test13 & 0   & 1       & 1                                                             \\
+        Test14 & 1   & 0       & 0                                                             \\
         \hline
     \end{tabular}
 

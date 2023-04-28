@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class RTreeLinear extends RTree {
 
-    public RTreeLinear(File file, String valueProperty, int N) throws IOException {
-        super(file, valueProperty, N);
+    public RTreeLinear(File file,  int N) throws IOException {
+        super(file, N);
     }
 
     /**

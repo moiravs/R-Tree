@@ -15,12 +15,13 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.geometry.jts.GeometryBuilder;
 
 import org.locationtech.jts.geom.Point;
+import org.opengis.feature.Property;
 
 public class Quickstart {
 
     public static void main(String[] args) throws Exception {
         // display a data store file chooser dialog for shapefiles
-        String filename = "../tutorial/maps/lt_1km.shp";
+        String filename = "../tutorial/maps/sh_statbel_statistical_sectors_3812_20220101.shp";
         FileLoader loader = new FileLoader(filename);
 
         FileDataStore store = FileDataStoreFinder.getDataStore(loader.loadFile());
@@ -34,7 +35,7 @@ public class Quickstart {
                 r.nextInt((int) global_bounds.getMinY(), (int) global_bounds.getMaxY()));
 
         // Créer le R-Tree
-        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), "ADM1_EN", 4);
+        RTreeLinear rtree = new RTreeLinear(loader.loadFile(), 4);
         long startTimeGlobal = System.currentTimeMillis();
 
         // Rechercher le point dans le R-Tree
@@ -44,10 +45,14 @@ public class Quickstart {
         // Afficher le temps total d'exécution
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
 
-        // pour afficher l'arbre créé : rtree.root.print(1);
-        if (node != null)
-            System.out.println(" node found = " + node.label);
-        else
+        if (node != null) {
+            System.out.println(" node found = " + node.getLabel("T_SEC_FR"));
+            for (Property prop : node.feature.getProperties()) {
+                if (prop.getName().toString() != "the_geom") {
+                    System.out.println(prop.getName() + ": " + prop.getValue());
+                }
+            }
+        } else
             System.out.println("Point not in any polygon");
         System.exit(0);
     }

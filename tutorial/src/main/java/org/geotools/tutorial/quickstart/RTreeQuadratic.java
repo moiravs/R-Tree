@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class RTreeQuadratic extends RTree {
 
-    public RTreeQuadratic(File file, String valueProperty, int N) throws IOException {
-        super(file, valueProperty, N);
+    public RTreeQuadratic(File file, int N) throws IOException {
+        super(file, N);
     }
 
     /**
@@ -26,8 +26,8 @@ public class RTreeQuadratic extends RTree {
     public ArrayList<MBRNode> pickSeeds(MBRNode node) {
         double maxArea = 0;
         int M = node.subnodes.size();
-        MBRNode seed1 = new MBRNode("test");
-        MBRNode seed2 = new MBRNode("test");
+        MBRNode seed1 = new MBRNode();
+        MBRNode seed2 = new MBRNode();
         Envelope copiedEnvelope;
         ArrayList<MBRNode> seeds = new ArrayList<MBRNode>();
 
