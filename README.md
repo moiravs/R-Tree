@@ -1,4 +1,5 @@
 # Algorithmique 2 - Projet R-Tree
+## Auteurs : Moïra Vanderslagmolen & Andrius Ežerskis
 
 ## Introduction
 Ce projet vise à implémenter une façon de vérifier si un point donné est situé dans un endroit géographique.
