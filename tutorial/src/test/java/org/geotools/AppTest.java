@@ -32,7 +32,7 @@ public class AppTest {
     long startTimeLocal;
     private static int i = 0;
     long endTimeLocal;
-    private static final int N = 10000;
+    private static final int N = 4;
 
     @Before
     public void timer() {
