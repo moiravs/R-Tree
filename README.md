@@ -5,6 +5,10 @@ Ce projet vise à implémenter une façon de vérifier si un point donné est si
 Pour ce faire, nous avons utilisé un R-Tree (qui contient des Minimum Bounding Rectangles), qui permet de hiérarchiser, par une relation de qui contient qui, les rectangles représentant des zones géographiques diverses.
 ### Librairies utilisées :
 
+java.util.ArrayList
+java.util.Random;
+geotools
+
 ## Comment compiler et exécuter les tests
 mvn clean install
 
