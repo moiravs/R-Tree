@@ -2,26 +2,26 @@
 \contentsline {section}{\numberline {2}Structure du code}{2}{section.2}%
 \contentsline {subsection}{\numberline {2.1}MBRNode}{2}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}RTree}{2}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}AddLeaf}{2}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.1}addLeaf}{2}{subsubsection.2.2.1}%
 \contentsline {subsubsection}{\numberline {2.2.2}Split}{2}{subsubsection.2.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.3}ChooseNode}{3}{subsubsection.2.2.3}%
+\contentsline {subsubsection}{\numberline {2.2.3}chooseNode}{3}{subsubsection.2.2.3}%
 \contentsline {subsubsection}{\numberline {2.2.4}Search}{3}{subsubsection.2.2.4}%
 \contentsline {subsection}{\numberline {2.3}RTreeLinear et RTreeQuadratic}{3}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}PickSeeds quadratique}{3}{subsubsection.2.3.1}%
-\contentsline {subsubsection}{\numberline {2.3.2}PickSeeds linéaire}{3}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.1}pickSeeds quadratique}{3}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}pickSeeds linéaire}{3}{subsubsection.2.3.2}%
 \contentsline {subsection}{\numberline {2.4}FileLoader}{4}{subsection.2.4}%
 \contentsline {section}{\numberline {3}Optimisations}{4}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Multi-polygones}{4}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}PickSeeds quadratique}{4}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.2}pickSeeds quadratique}{4}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}Nombre d'enfants maximum}{4}{subsection.3.3}%
 \contentsline {section}{\numberline {4}Expérience sur données réelles}{5}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Présentation des tests}{5}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Présentation des cartes}{5}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Résultats des tests}{5}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.3}Résultats des tests}{6}{subsection.4.3}%
 \contentsline {subsection}{\numberline {4.4}Analyse des tests}{6}{subsection.4.4}%
 \contentsline {subsubsection}{\numberline {4.4.1}Optimisation}{6}{subsubsection.4.4.1}%
 \contentsline {subsubsection}{\numberline {4.4.2}Influence du N}{7}{subsubsection.4.4.2}%
 \contentsline {subsubsection}{\numberline {4.4.3}Algorithme linéaire vs Algorithme quadratique}{7}{subsubsection.4.4.3}%
 \contentsline {section}{\numberline {5}Conclusion}{7}{section.5}%
 \contentsline {section}{\numberline {6}Annexes}{7}{section.6}%
-\contentsline {section}{\hbox to\@tempdima {\hfil }References}{8}{section*.2}%
+\contentsline {section}{\hbox to\@tempdima {\hfil }References}{7}{section*.2}%
