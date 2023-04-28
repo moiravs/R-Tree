@@ -20,7 +20,6 @@ import org.opengis.feature.Property;
 public class Quickstart {
 
     public static void main(String[] args) throws Exception {
-        // display a data store file chooser dialog for shapefiles
         String filename = "../tutorial/maps/sh_statbel_statistical_sectors_3812_20220101.shp";
         FileLoader loader = new FileLoader(filename);
 
@@ -46,7 +45,6 @@ public class Quickstart {
         System.out.println("Total search function execution time: " + (endTimeGlobal - startTimeGlobal));
 
         if (node != null) {
-            System.out.println(" node found = " + node.getLabel("T_SEC_FR"));
             for (Property prop : node.feature.getProperties()) {
                 if (prop.getName().toString() != "the_geom") {
                     System.out.println(prop.getName() + ": " + prop.getValue());
